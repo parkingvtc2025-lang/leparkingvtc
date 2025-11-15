@@ -9,13 +9,15 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-
+/cars
+/admin
 # testing
 /coverage
 
 # next.js
 /.next/
 /out/
+/code
 
 # production
 /build

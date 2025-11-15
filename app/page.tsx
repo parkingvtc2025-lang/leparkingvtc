@@ -5,19 +5,20 @@ import StickyNav from "@/components/sticky-nav"
 import FloatingContact from "@/components/floating-contact"
 import Chatbot from "@/components/chatbot"
 import CarShowcase from "@/components/car-showcase"
-import { AboutSection, ProductsSection, BlogSection, ContactSection } from "@/components/sections"
+import { AboutSection, ProductsSection } from "@/components/sections"
+import SectionDivider from "@/components/section-divider"
 import Footer from "@/components/footer"
 import ScrollIndicator from "@/components/scroll-indicator"
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="relative min-h-screen">
       <Navbar />
       <CarShowcase />
+      <SectionDivider variant="sunset" />
       <AboutSection />
+      <SectionDivider variant="ocean" flip />
       <ProductsSection />
-      <BlogSection />
-      <ContactSection />
       <Footer />
       <StickyNav />
       <FloatingContact />

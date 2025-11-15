@@ -14,7 +14,6 @@ interface Message {
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isStickyNavVisible, setIsStickyNavVisible] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -34,15 +33,6 @@ export default function Chatbot() {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsStickyNavVisible(window.scrollY > window.innerHeight * 0.8)
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -96,12 +86,10 @@ export default function Chatbot() {
 
   return (
     <>
-      {/* Chatbot Button - Positioned bottom-right, lower position, hidden when sticky nav visible */}
+      {/* Chatbot Button - bottom right */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-32 right-6 z-40 p-3 sm:p-4 bg-foreground text-background rounded-full shadow-lg hover:scale-110 transition-all duration-500 animate-pulse ${
-          isStickyNavVisible ? "opacity-0 translate-y-20 pointer-events-none" : "opacity-100 translate-y-0"
-        }`}
+        className="fixed bottom-6 right-6 z-[1000] rounded-full bg-primary p-3 text-primary-foreground shadow-lg transition-transform hover:scale-105 pointer-events-auto"
         aria-label="Open chatbot"
       >
         {isOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />}
@@ -109,13 +97,9 @@ export default function Chatbot() {
 
       {/* Chatbot Window */}
       {isOpen && (
-        <div
-          className={`fixed bottom-48 right-6 z-40 w-96 max-w-[calc(100vw-3rem)] h-96 bg-background border border-border/30 rounded-2xl shadow-2xl flex flex-col overflow-hidden backdrop-blur-xl transition-all duration-500 ${
-            isStickyNavVisible ? "opacity-0 translate-y-20 pointer-events-none" : "opacity-100 translate-y-0"
-          }`}
-        >
+        <div className="fixed bottom-20 right-6 z-[1000] flex h-96 w-[calc(100vw-2.5rem)] max-w-md flex-col overflow-hidden rounded-2xl border border-border/20 bg-background shadow-xl transition-transform pointer-events-auto">
           {/* Header */}
-          <div className="bg-foreground text-background px-6 py-4 flex items-center justify-between">
+          <div className="bg-primary text-primary-foreground px-6 py-4 flex items-center justify-between">
             <div>
               <h3 className="font-semibold text-sm sm:text-base">Le Parking VTC</h3>
               <p className="text-xs opacity-80">En ligne</p>
@@ -158,12 +142,12 @@ export default function Chatbot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Votre message..."
-              className="flex-1 px-3 py-2 bg-secondary rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
+              className="flex-1 px-3 py-2 bg-secondary rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/25"
             />
             <button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="p-2 bg-foreground text-background rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="p-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
             >
               <Send className="w-4 h-4" />
             </button>

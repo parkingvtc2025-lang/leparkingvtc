@@ -10,6 +10,9 @@ interface Car {
   image: string
   tagline: string
   description: string
+  horsepower: number
+  acceleration: string
+  topSpeed: number
 }
 
 interface CarCardProps {
@@ -73,8 +76,22 @@ export default function CarCard({ car, isActive }: CarCardProps) {
           <p className="text-lg text-muted-foreground mb-6">{car.model}</p>
           <p className="text-sm text-muted-foreground italic mb-8">{car.description}</p>
 
-          {/* Checkout Button */}
-          <button className="px-8 py-3 border-2 border-foreground text-foreground font-medium rounded-lg hover:bg-foreground hover:text-background transition-all duration-300 transform hover:scale-105">
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-8">
+            <div className="min-w-[120px] space-y-1 text-left">
+              <p className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground/70">Puissance</p>
+              <p className="text-xl font-semibold text-foreground">{car.horsepower} ch</p>
+            </div>
+            <div className="min-w-[120px] space-y-1 text-left">
+              <p className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground/70">0-100 km/h</p>
+              <p className="text-xl font-semibold text-foreground">{car.acceleration}</p>
+            </div>
+            <div className="min-w-[120px] space-y-1 text-left">
+              <p className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground/70">V. max</p>
+              <p className="text-xl font-semibold text-foreground">{car.topSpeed} km/h</p>
+            </div>
+          </div>
+
+          <button className="relative px-8 py-3 border-2 border-foreground text-foreground font-medium rounded-lg overflow-hidden transition-all duration-500 transform hover:scale-105 hover:-rotate-1 hover:shadow-[0_20px_35px_rgba(15,23,42,0.25)]">
             Réserver
           </button>
         </div>
