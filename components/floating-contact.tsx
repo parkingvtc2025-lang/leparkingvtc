@@ -6,7 +6,7 @@ import { Mail, MessageCircle, Phone, X } from "lucide-react"
 export default function FloatingContact() {
   const [open, setOpen] = useState(false)
   return (
-    <div className="fixed bottom-6 left-6 z-[1000] pointer-events-auto">
+    <div className="fixed left-6 bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] z-[1000] pointer-events-auto">
       <button
         onClick={() => setOpen((v) => !v)}
         className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-primary-foreground shadow-lg transition-transform hover:-translate-y-0.5 hover:shadow-xl"

@@ -27,7 +27,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
       <Navbar />
 
       {/* Mobile hero - full width image on top */}
-      <div className="relative h-[55vh] w-full lg:hidden">
+      <div className="relative h-[55svh] w-full overflow-hidden lg:hidden">
         <ImageCarousel
           images={Array.isArray(vehicle.imageUrls) && vehicle.imageUrls.length > 0 ? vehicle.imageUrls : [vehicle.image]}
           sizes="100vw"
@@ -41,7 +41,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
       <div className="relative z-10 lg:grid lg:h-screen lg:grid-cols-[minmax(0,1fr)_520px]">
         {/* Left: full-height imagery, fixed visually with sticky */}
         <div className="relative hidden lg:block">
-          <div className="sticky top-0 h-screen">
+          <div className="sticky top-0 h-[100dvh] overflow-hidden">
             <ImageCarousel
               images={Array.isArray(vehicle.imageUrls) && vehicle.imageUrls.length > 0 ? vehicle.imageUrls : [vehicle.image]}
               sizes="(min-width: 1024px) calc(100vw - 520px)"
@@ -53,7 +53,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
         </div>
 
         {/* Right: scrollable information panel with fixed bottom CTA */}
-        <aside className="relative border-l border-foreground/10 bg-background/95 lg:max-h-screen lg:overflow-y-auto">
+        <aside className="relative border-l border-foreground/10 bg-background/95 lg:max-h-[100dvh] lg:overflow-y-auto">
           <section className="px-6 py-8 md:px-8 md:py-12 lg:py-16 space-y-8">
             <div className="flex items-center justify-between gap-4">
               <Link
@@ -165,7 +165,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
           {/* Sticky bottom action bar (green CTA) */}
           <div className="sticky bottom-0 z-10 border-t border-foreground/10 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-            <div className="px-6 py-4 md:px-8">
+            <div className="px-6 py-4 md:px-8 pb-[env(safe-area-inset-bottom)]">
               <div className="flex items-center justify-between gap-4">
                 <div className="text-sm leading-tight">
                   <span className="block text-[10px] uppercase tracking-[0.35em] text-muted-foreground">À partir de</span>

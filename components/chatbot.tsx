@@ -89,7 +89,7 @@ export default function Chatbot() {
       {/* Chatbot Button - bottom right */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-[1000] rounded-full bg-primary p-3 text-primary-foreground shadow-lg transition-transform hover:scale-105 pointer-events-auto"
+        className="fixed right-[calc(env(safe-area-inset-right)+1.5rem)] bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] z-[1000] rounded-full bg-primary p-3 text-primary-foreground shadow-lg transition-transform hover:scale-105 pointer-events-auto"
         aria-label="Open chatbot"
       >
         {isOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />}
@@ -97,7 +97,7 @@ export default function Chatbot() {
 
       {/* Chatbot Window */}
       {isOpen && (
-        <div className="fixed bottom-20 right-6 z-[1000] flex h-96 w-[calc(100vw-2.5rem)] max-w-md flex-col overflow-hidden rounded-2xl border border-border/20 bg-background shadow-xl transition-transform pointer-events-auto">
+        <div className="fixed right-[calc(env(safe-area-inset-right)+1.5rem)] bottom-[calc(env(safe-area-inset-bottom)+5rem)] z-[1000] flex h-[24rem] max-h-[80svh] w-[calc(100vw-2.5rem)] max-w-md flex-col overflow-hidden rounded-2xl border border-border/20 bg-background shadow-xl transition-transform pointer-events-auto">
           {/* Header */}
           <div className="bg-primary text-primary-foreground px-6 py-4 flex items-center justify-between">
             <div>

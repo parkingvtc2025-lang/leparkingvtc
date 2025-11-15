@@ -48,7 +48,7 @@ export default function ImageCarousel({
 
   return (
     <div
-      className={"relative h-full w-full select-none " + (className || "")}
+      className={"relative h-full w-full select-none overflow-hidden " + (className || "")}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onTouchStart={() => setHover(true)}

@@ -270,7 +270,7 @@ export default function FleetPage() {
         )}
       </div>
 
-      <div className="fixed right-5 bottom-24 z-[900] md:hidden">
+      <div className="fixed right-5 bottom-[calc(env(safe-area-inset-bottom)+6rem)] z-[900] md:hidden">
         <button
           type="button"
           onClick={() => setMobileOpen(true)}
@@ -284,7 +284,7 @@ export default function FleetPage() {
       {mobileOpen && (
         <div className="fixed inset-0 z-[950] md:hidden">
           <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} aria-hidden />
-          <div className="absolute bottom-0 left-0 right-0 max-h-[80%] rounded-t-2xl border-t border-foreground/15 bg-background p-5 shadow-2xl">
+          <div className="absolute bottom-0 left-0 right-0 max-h-[80svh] rounded-t-2xl border-t border-foreground/15 bg-background p-5 pb-[env(safe-area-inset-bottom)] shadow-2xl overflow-y-auto">
             <div className="mb-3 flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">Filtres</span>
               <button onClick={() => setMobileOpen(false)} className="rounded p-1 hover:bg-secondary" aria-label="Fermer">

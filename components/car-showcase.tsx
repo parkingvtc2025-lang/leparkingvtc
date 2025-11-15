@@ -99,7 +99,7 @@ export default function CarShowcase() {
   return (
     <div className="relative w-full overflow-hidden bg-background pt-16">
       {/* Carousel Container */}
-      <div className="relative h-screen flex items-center justify-center">
+      <div className="relative h-[100svh] lg:h-[100dvh] flex items-center justify-center">
         <div className="absolute top-10 left-6 right-6 z-30 mx-auto max-w-lg space-y-5 md:left-12 md:right-auto md:mx-0">
           <p className="text-xs tracking-[0.4em] text-muted-foreground/80 uppercase md:text-sm">
             COLLECTION PRIVÉE
@@ -184,7 +184,7 @@ export default function CarShowcase() {
       </div>
 
       {/* Dots Navigation */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+      <div className="absolute bottom-[calc(env(safe-area-inset-bottom)+2rem)] sm:bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
         {CARS.map((_, index) => (
           <button
             key={index}
