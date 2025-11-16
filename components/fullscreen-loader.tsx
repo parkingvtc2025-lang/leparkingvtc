@@ -9,7 +9,14 @@ export default function FullscreenLoader() {
 
   useEffect(() => {
     setVisible(true)
-    const timeout = setTimeout(() => setVisible(false), 400)
+    const timeout = setTimeout(() => {
+      setVisible(false)
+      try {
+        window.dispatchEvent(new Event("app:loaded"))
+      } catch (_) {
+        /* noop */
+      }
+    }, 400)
     return () => clearTimeout(timeout)
   }, [pathname])
 

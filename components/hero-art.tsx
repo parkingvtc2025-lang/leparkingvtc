@@ -12,8 +12,14 @@ export default function HeroArt() {
 
   useEffect(() => {
     setCanAnimate(false)
-    const t = setTimeout(() => setCanAnimate(true), 500)
-    return () => clearTimeout(t)
+    const onLoaded = () => setCanAnimate(true)
+    window.addEventListener('app:loaded', onLoaded)
+    // Fallback in case event fired before mount or on first load
+    const fallback = setTimeout(() => setCanAnimate(true), 700)
+    return () => {
+      window.removeEventListener('app:loaded', onLoaded)
+      clearTimeout(fallback)
+    }
   }, [pathname])
 
   return (
@@ -101,13 +107,25 @@ export default function HeroArt() {
             </p>
           )}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Link href="/flotte?reserve=1" className="rounded-lg bg-foreground px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-primary-foreground transition-transform hover:-translate-y-0.5 hover:opacity-90">
+            <Link
+              href="/flotte?reserve=1"
+              className={`rounded-lg bg-foreground px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-primary-foreground transition-all duration-700 transform-gpu shine-sweep ${canAnimate ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-2 scale-95'}`}
+              style={{ transitionDelay: canAnimate ? '120ms' as any : undefined }}
+            >
               Réserver
             </Link>
-            <Link href="/flotte" className="rounded-lg border border-foreground/20 bg-background px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-foreground transition-transform hover:-translate-y-0.5">
+            <Link
+              href="/flotte"
+              className={`rounded-lg border border-foreground/20 bg-background px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-foreground transition-all duration-700 transform-gpu shine-sweep ${canAnimate ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-2 scale-95'}`}
+              style={{ transitionDelay: canAnimate ? '220ms' as any : undefined }}
+            >
               Voir notre flotte
             </Link>
-            <a href="#about" className="rounded-lg border border-foreground/20 bg-background px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-foreground transition-transform hover:-translate-y-0.5">
+            <a
+              href="#about"
+              className={`rounded-lg border border-foreground/20 bg-background px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-foreground transition-all duration-700 transform-gpu shine-sweep ${canAnimate ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-2 scale-95'}`}
+              style={{ transitionDelay: canAnimate ? '320ms' as any : undefined }}
+            >
               En savoir plus
             </a>
           </div>
