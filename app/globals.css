@@ -304,6 +304,88 @@ html {
   }
 }
 
+@keyframes art-gradient-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes art-soft-glow {
+  0%, 100% {
+    text-shadow: 0 0 0 rgba(0,0,0,0.0), 0 6px 22px rgba(15, 23, 42, 0.18);
+  }
+  50% {
+    text-shadow: 0 0 18px rgba(14, 59, 46, 0.15), 0 10px 28px rgba(15, 23, 42, 0.28);
+  }
+}
+
+@keyframes shine-sweep {
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
+
+@layer utilities {
+  .art-gradient-shimmer {
+    background-size: 200% 200%;
+    animation: art-gradient-shimmer 14s linear infinite;
+  }
+
+  .art-soft-glow {
+    animation: art-soft-glow 6s ease-in-out infinite;
+  }
+
+  .underline-reveal {
+    background-image: linear-gradient(to right, var(--primary), var(--primary));
+    background-repeat: no-repeat;
+    background-size: 0 2px;
+    background-position: 0 100%;
+    transition: background-size 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .underline-reveal:hover {
+    background-size: 100% 2px;
+  }
+
+  .shine-sweep {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+  }
+  .shine-sweep::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.18) 20%, rgba(255,255,255,0.32) 40%, transparent 60%);
+    transform: translateX(-150%);
+    pointer-events: none;
+  }
+  .shine-sweep:hover::after {
+    animation: shine-sweep 900ms ease-out forwards;
+  }
+
+  .art-stagger {
+    display: inline-block;
+    animation: float-up 650ms ease-out both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .art-gradient-shimmer,
+  .art-soft-glow,
+  .art-stagger {
+    animation: none !important;
+  }
+  .shine-sweep:hover::after {
+    animation: none !important;
+  }
+}
+
 /* DayPicker reserved/blocked styles */
 .rdp .rdp-day_reserved,
 .rdp .rdp-day_blocked {

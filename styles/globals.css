@@ -123,3 +123,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+.pill-nav-container{position:static;top:auto;left:auto;right:auto;width:100%;display:flex;justify-content:center}
+.pill-nav{justify-content:center}
+.pill-logo{display:none}
+.pill-nav-items{background:transparent}

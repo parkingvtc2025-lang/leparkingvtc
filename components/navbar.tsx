@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Menu, X, ArrowUp } from "lucide-react"
+import { ArrowUp } from "lucide-react"
+import PillNav from "./PillNav"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -54,6 +55,13 @@ export default function Navbar() {
     { id: "blog", label: "Blog" },
   ]
 
+  const pillItems = [
+    { label: "Accueil", href: "#" },
+    { label: "À propos", href: "#about" },
+    { label: "Notre flotte", href: "#products" },
+    { label: "Blog", href: "#blog" },
+  ]
+
   const handleNavClick = (sectionId: string) => {
     scrollToSection(sectionId)
     setIsOpen(false)
@@ -62,53 +70,25 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-40 bg-background border-b border-border/20 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
           isDesktop && isDocked ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-3 h-3 bg-foreground rounded-full"></div>
-            <span className="text-lg font-bold tracking-tight">Le Parking VTC</span>
-          </div>
-
-          <div className="hidden md:flex items-center gap-4">
-            {navLinks.map(({ id, label }) => (
-              <button
-                key={id}
-                onClick={() => handleNavClick(id)}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-
-          <div className="md:hidden flex items-center gap-2">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 hover:bg-secondary rounded-lg transition-colors"
-            >
-              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
+        <div className="mx-auto py-3 flex justify-center">
+          <PillNav
+            logo=""
+            logoAlt=""
+            items={pillItems}
+            activeHref={"#"}
+            className="custom-nav"
+            ease="power2.easeOut"
+            baseColor="#0b0b0b"
+            pillColor="#ffffff"
+            hoveredPillTextColor="#ffffff"
+            pillTextColor="#000000"
+            onMobileMenuClick={() => {}}
+          />
         </div>
-
-        {isOpen && (
-          <div className="md:hidden border-t border-border/20 bg-background">
-            <div className="px-6 py-4 flex flex-col gap-4">
-              {navLinks.map(({ id, label }) => (
-                <button
-                  key={id}
-                  onClick={() => handleNavClick(id)}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left"
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
       </nav>
 
       {isDesktop && (

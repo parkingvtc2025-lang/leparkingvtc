@@ -4,7 +4,7 @@ import Navbar from "@/components/navbar"
 import StickyNav from "@/components/sticky-nav"
 import FloatingContact from "@/components/floating-contact"
 import Chatbot from "@/components/chatbot"
-import CarShowcase from "@/components/car-showcase"
+import HeroArt from "@/components/hero-art"
 import { AboutSection, ProductsSection } from "@/components/sections"
 import SectionDivider from "@/components/section-divider"
 import Footer from "@/components/footer"
@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <main className="relative min-h-screen">
       <Navbar />
-      <CarShowcase />
+      <HeroArt />
       <SectionDivider variant="sunset" />
       <AboutSection />
       <SectionDivider variant="ocean" flip />

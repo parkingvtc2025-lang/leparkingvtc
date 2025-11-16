@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 
 export default function ScrollIndicator() {
   const [progress, setProgress] = useState(0)
-  const [isVisible, setIsVisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
 
   useEffect(() => {
@@ -23,9 +23,10 @@ export default function ScrollIndicator() {
       const docHeight = document.documentElement.scrollHeight - window.innerHeight
       const newProgress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
       setProgress(newProgress)
-      setIsVisible(scrollTop < docHeight)
+      setIsVisible(scrollTop > 0 && scrollTop < docHeight)
     }
 
+    handleScroll()
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
