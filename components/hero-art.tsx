@@ -1,10 +1,21 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import SplitText from "@/components/SplitText"
 import TextType from "@/components/TextType"
+import { usePathname } from "next/navigation"
 
 export default function HeroArt() {
+  const pathname = usePathname()
+  const [canAnimate, setCanAnimate] = useState(false)
+
+  useEffect(() => {
+    setCanAnimate(false)
+    const t = setTimeout(() => setCanAnimate(true), 500)
+    return () => clearTimeout(t)
+  }, [pathname])
+
   return (
     <div className="relative w-full overflow-hidden bg-background">
       <section className="relative h-[100svh] min-h-[560px] flex items-center justify-center">
@@ -36,6 +47,7 @@ export default function HeroArt() {
         <div className="relative z-10 mx-auto w-full max-w-4xl px-6 text-center">
           <p className="text-[11px] uppercase tracking-[0.55em] text-muted-foreground/70">Atelier de mobilité</p>
           <div className="mt-4 space-y-2">
+            {canAnimate ? (
             <SplitText
               tag="h1"
               text="Signature VTC"
@@ -49,6 +61,10 @@ export default function HeroArt() {
               textAlign="center"
               onLetterAnimationComplete={() => {}}
             />
+            ) : (
+              <h1 className="text-5xl md:text-7xl leading-[1.05] text-foreground">Signature VTC</h1>
+            )}
+            {canAnimate ? (
             <SplitText
               tag="h2"
               text="Location de véhicules pour chauffeurs VTC."
@@ -62,7 +78,11 @@ export default function HeroArt() {
               textAlign="center"
               onLetterAnimationComplete={() => {}}
             />
+            ) : (
+              <h2 className="text-4xl md:text-6xl leading-[1.05] text-foreground/90 italic">Location de véhicules pour chauffeurs VTC.</h2>
+            )}
           </div>
+          {canAnimate ? (
           <TextType
             as="p"
             text={["Location VTC clé en main : flotte récente, contrats flexibles, assurance & entretien inclus, assistance 24/7, véhicule de remplacement."]}
@@ -75,6 +95,11 @@ export default function HeroArt() {
             variableSpeed={{ min: 22, max: 34 }}
             onSentenceComplete={() => {}}
           />
+          ) : (
+            <p className="mx-auto mt-5 max-w-2xl text-sm md:text-base text-muted-foreground">
+              Location VTC clé en main : flotte récente, contrats flexibles, assurance & entretien inclus, assistance 24/7, véhicule de remplacement.
+            </p>
+          )}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link href="/flotte?reserve=1" className="rounded-lg bg-foreground px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-primary-foreground transition-transform hover:-translate-y-0.5 hover:opacity-90">
               Réserver
