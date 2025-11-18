@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { gsap } from 'gsap';
 import './PillNav.css';
 
@@ -226,18 +226,19 @@ const PillNav = ({
     <div className="pill-nav-container">
       <nav className={`pill-nav ${className}`} aria-label="Primary" style={cssVars}>
        
-        <div className="pill-nav-items desktop-only" ref={navItemsRef}>
+        <div className="pill-nav-items desktop-only" ref={navItemsRef} style={{ borderRadius: 10 }}>
           <ul className="pill-list" role="menubar">
             {items.map((item, i) => (
               <li key={item.href || `item-${i}`} role="none">
                 {isRouterLink(item.href) ? (
                   <Link
                     role="menuitem"
-                    to={item.href}
+                    href={item.href}
                     className={`pill${activeHref === item.href ? ' is-active' : ''}`}
                     aria-label={item.ariaLabel || item.label}
                     onMouseEnter={() => handleEnter(i)}
                     onMouseLeave={() => handleLeave(i)}
+                    style={{ borderRadius: 8 }}
                   >
                     <span
                       className="hover-circle"
@@ -287,21 +288,23 @@ const PillNav = ({
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
           ref={hamburgerRef}
+          style={{ borderRadius: 10 }}
         >
           <span className="hamburger-line" />
           <span className="hamburger-line" />
         </button>
       </nav>
 
-      <div className="mobile-menu-popover mobile-only" ref={mobileMenuRef} style={cssVars}>
+      <div className="mobile-menu-popover mobile-only" ref={mobileMenuRef} style={{ ...cssVars, borderRadius: 12 }}>
         <ul className="mobile-menu-list">
           {items.map((item, i) => (
             <li key={item.href || `mobile-item-${i}`}>
               {isRouterLink(item.href) ? (
                 <Link
-                  to={item.href}
+                  href={item.href}
                   className={`mobile-menu-link${activeHref === item.href ? ' is-active' : ''}`}
                   onClick={() => setIsMobileMenuOpen(false)}
+                  style={{ borderRadius: 8 }}
                 >
                   {item.label}
                 </Link>
@@ -310,6 +313,7 @@ const PillNav = ({
                   href={item.href}
                   className={`mobile-menu-link${activeHref === item.href ? ' is-active' : ''}`}
                   onClick={() => setIsMobileMenuOpen(false)}
+                  style={{ borderRadius: 8 }}
                 >
                   {item.label}
                 </a>

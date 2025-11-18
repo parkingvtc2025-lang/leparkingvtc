@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { ArrowUp } from "lucide-react"
 import PillNav from "./PillNav"
+import Link from "next/link"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -50,16 +51,19 @@ export default function Navbar() {
   }
 
   const navLinks = [
-    { id: "about", label: "À propos" },
-    { id: "products", label: "Notre flotte" },
-    { id: "blog", label: "Blog" },
+    { label: "Accueil", href: "/" },
+    { label: "À propos", href: "/#about" },
+    { label: "Documents", href: "/documents" },
+    { label: "Notre flotte", href: "/flotte" },
+    { label: "Blog", href: "/#blog" },
   ]
 
   const pillItems = [
-    { label: "Accueil", href: "#" },
-    { label: "À propos", href: "#about" },
-    { label: "Notre flotte", href: "#products" },
-    { label: "Blog", href: "#blog" },
+    { label: "Accueil", href: "/" },
+    { label: "À propos", href: "/#about" },
+    { label: "Documents", href: "/documents" },
+    { label: "Notre flotte", href: "/flotte" },
+    { label: "Blog", href: "/#blog" },
   ]
 
   const handleNavClick = (sectionId: string) => {
@@ -97,19 +101,19 @@ export default function Navbar() {
             isDocked ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 pointer-events-none"
           }`}
         >
-          <div className="flex items-center gap-2 rounded-lg bg-background px-5 py-3 text-sm font-medium text-foreground shadow-xl">
-            {navLinks.map(({ id, label }) => (
-              <button
-                key={id}
-                onClick={() => scrollToSection(id)}
-                className="rounded-md bg-secondary/30 px-4 py-1.5 hover:bg-secondary/50 transition-colors"
+          <div className="flex items-center gap-2 rounded bg-background px-5 py-3 text-sm font-medium text-foreground shadow-xl">
+            {navLinks.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className="rounded bg-secondary/30 px-4 py-1.5 hover:bg-secondary/50 transition-colors"
               >
                 {label}
-              </button>
+              </Link>
             ))}
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="rounded-md bg-primary px-3 py-1.5 text-primary-foreground hover:opacity-90 transition-opacity"
+              className="rounded bg-primary px-3 py-1.5 text-primary-foreground hover:opacity-90 transition-opacity"
               aria-label="Remonter en haut"
             >
               <ArrowUp className="w-4 h-4" />

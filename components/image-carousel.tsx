@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import Image from "next/image"
 
 type Props = {
@@ -22,6 +22,7 @@ export default function ImageCarousel({
   const [index, setIndex] = useState(0)
   const [hover, setHover] = useState(false)
   const len = cleanImages.length
+  const touch = useRef<{ startX: number; startY: number; dx: number; dy: number; active: boolean }>({ startX: 0, startY: 0, dx: 0, dy: 0, active: false })
 
   useEffect(() => {
     if (len < 2 || hover) return
@@ -51,8 +52,29 @@ export default function ImageCarousel({
       className={"relative h-full w-full select-none overflow-hidden " + (className || "")}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      onTouchStart={() => setHover(true)}
-      onTouchEnd={() => setHover(false)}
+      onTouchStart={(e) => {
+        const t = e.changedTouches[0]
+        touch.current = { startX: t.clientX, startY: t.clientY, dx: 0, dy: 0, active: true }
+        setHover(true)
+      }}
+      onTouchMove={(e) => {
+        if (!touch.current.active) return
+        const t = e.changedTouches[0]
+        touch.current.dx = t.clientX - touch.current.startX
+        touch.current.dy = t.clientY - touch.current.startY
+      }}
+      onTouchEnd={() => {
+        if (!touch.current.active) return setHover(false)
+        const { dx, dy } = touch.current
+        touch.current.active = false
+        // Only act on mostly horizontal swipes
+        if (Math.abs(dx) > Math.abs(dy)) {
+          const THRESH = 40
+          if (dx > THRESH) setIndex((i) => (i - 1 + len) % len)
+          else if (dx < -THRESH) setIndex((i) => (i + 1) % len)
+        }
+        setHover(false)
+      }}
     >
       <div
         className="absolute inset-0 flex transition-transform duration-700 ease-out"

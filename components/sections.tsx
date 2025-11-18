@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useRef, useState, useEffect, useMemo } from "react"
-import { MapPin, Users, Zap, Shield, ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react"
+import { MapPin, Users, Zap, Shield, ChevronLeft, ChevronRight, ArrowUpRight, IdCard, FileText, BadgeCheck, Home, Euro } from "lucide-react"
 
 export function AboutSection() {
   return (
@@ -72,6 +72,84 @@ export function AboutSection() {
               <p className="mt-3 text-xs uppercase tracking-[0.3em]">Client VTC Premium</p>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export function DocumentsSection() {
+  const items = [
+    {
+      title: "Pièce d'identité",
+      desc: "Carte d'identité ou passeport en cours de validité.",
+      Icon: IdCard,
+    },
+    {
+      title: "Permis de conduire",
+      desc: "Catégorie B valide et conforme à la réglementation.",
+      Icon: BadgeCheck,
+    },
+    {
+      title: "Carte VTC",
+      desc: "Autorisation professionnelle de chauffeur VTC.",
+      Icon: FileText,
+    },
+    {
+      title: "Justificatif de domicile",
+      desc: "Facture récente (moins de 3 mois) ou attestation.",
+      Icon: Home,
+    },
+    {
+      title: "Caution 300€",
+      desc: "Dépôt de garantie restitué selon les conditions.",
+      Icon: Euro,
+    },
+  ]
+
+  return (
+    <section id="documents" className="relative py-20 md:py-28 px-6">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-secondary/10" />
+      <div className="relative mx-auto max-w-6xl">
+        <div className="text-center">
+          <p className="text-xs uppercase tracking-[0.55em] text-muted-foreground">Onboarding</p>
+          <h2 className="mt-4 text-4xl md:text-5xl font-bold text-balance">Documents à fournir</h2>
+          <p className="mt-3 md:mt-4 max-w-2xl mx-auto text-sm md:text-base text-muted-foreground">
+            Préparez ces éléments pour un démarrage rapide, fluide et professionnel.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map(({ title, desc, Icon }, i) => (
+            <div
+              key={i}
+              className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-6 md:p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            >
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{
+                background:
+                  "radial-gradient(600px circle at var(--x,50%) var(--y,50%), hsl(var(--primary)/0.12), transparent 40%)",
+              }} />
+              <div className="relative flex items-start gap-4">
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Icon className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg md:text-xl font-semibold">{title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <Link
+            href="#contact"
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-primary-foreground shadow-lg transition-transform hover:-translate-y-0.5 hover:shadow-xl"
+          >
+            Soumettre vos documents
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
         </div>
       </div>
     </section>

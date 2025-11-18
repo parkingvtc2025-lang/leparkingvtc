@@ -5,7 +5,7 @@ import StickyNav from "@/components/sticky-nav"
 import FloatingContact from "@/components/floating-contact"
 import Chatbot from "@/components/chatbot"
 import HeroArt from "@/components/hero-art"
-import { AboutSection, ProductsSection } from "@/components/sections"
+import { AboutSection, DocumentsSection, ProductsSection } from "@/components/sections"
 import SectionDivider from "@/components/section-divider"
 import Footer from "@/components/footer"
 import ScrollIndicator from "@/components/scroll-indicator"
@@ -17,6 +17,8 @@ export default function Home() {
       <HeroArt />
       <SectionDivider variant="sunset" />
       <AboutSection />
+      <SectionDivider variant="ocean" />
+      <DocumentsSection />
       <SectionDivider variant="ocean" flip />
       <ProductsSection />
       <Footer />
