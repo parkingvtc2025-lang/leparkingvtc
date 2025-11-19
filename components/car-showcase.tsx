@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import CarCard from "./car-card"
 
@@ -70,28 +70,75 @@ const CARS = [
 export default function CarShowcase() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoPlay, setIsAutoPlay] = useState(true)
+  const [vehicles, setVehicles] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const res = await fetch("/api/vehicles", { cache: "no-store" })
+        if (!res.ok) throw new Error("HTTP " + res.status)
+        const data = await res.json()
+        if (!mounted) return
+        const list = Array.isArray(data.vehicles) ? data.vehicles : []
+        // Map API vehicles to CarCard shape
+        const mapped = list.map((v: any) => ({
+          id: v.id,
+          name: v.name,
+          model: v.category || undefined,
+          color: undefined,
+          image: v.image, // presentationImageUrl prioritized by API
+          tagline: (v.category || "PRÉSENTATION").toString().split(" ")[0]?.toUpperCase(),
+          description: v.summary || "Réservez votre véhicule premium dès maintenant",
+          horsepower: undefined,
+          acceleration: undefined,
+          topSpeed: undefined,
+        }))
+        setVehicles(mapped)
+        setCurrentIndex(0)
+      } catch (e) {
+        if (mounted) setError("Impossible de charger les véhicules.")
+      } finally {
+        if (mounted) setLoading(false)
+      }
+    })()
+    return () => { mounted = false }
+  }, [])
+
+  const LIST = useMemo(() => (vehicles.length ? vehicles : CARS), [vehicles])
+  const N = LIST.length
 
   useEffect(() => {
     if (!isAutoPlay) return
-
+    if (N < 2) return
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % CARS.length)
+      setCurrentIndex((prev) => (prev + 1) % N)
     }, 5000)
-
     return () => clearInterval(interval)
-  }, [isAutoPlay])
+  }, [isAutoPlay, N])
+
+  useEffect(() => {
+    if (currentIndex >= N) setCurrentIndex(0)
+  }, [N, currentIndex])
 
   const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + CARS.length) % CARS.length)
+    if (N < 1) return
+    setCurrentIndex((prev) => (prev - 1 + N) % N)
     setIsAutoPlay(false)
   }
 
   const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % CARS.length)
+    if (N < 1) return
+    setCurrentIndex((prev) => (prev + 1) % N)
     setIsAutoPlay(false)
   }
 
   const goToSlide = (index: number) => {
+    if (index < 0 || index >= N) return
     setCurrentIndex(index)
     setIsAutoPlay(false)
   }
@@ -153,12 +200,15 @@ export default function CarShowcase() {
         </div>
         {/* Slides */}
         <div className="relative w-full h-full">
-          {CARS.map((car, index) => (
+          {LIST.map((car, index) => (
             <div
               key={car.id}
               className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
-                index === currentIndex ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                index === currentIndex
+                  ? "opacity-100 scale-100 z-10 pointer-events-auto"
+                  : "opacity-0 scale-95 z-0 pointer-events-none"
               }`}
+              aria-hidden={index !== currentIndex}
             >
               <CarCard car={car} isActive={index === currentIndex} />
             </div>
@@ -185,7 +235,7 @@ export default function CarShowcase() {
 
       {/* Dots Navigation */}
       <div className="absolute bottom-[calc(env(safe-area-inset-bottom)+2rem)] sm:bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
-        {CARS.map((_, index) => (
+        {LIST.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}

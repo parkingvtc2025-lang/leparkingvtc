@@ -53,6 +53,9 @@ export async function GET(_req: Request, context: { params: Promise<{ id: string
         // Expose both for precise labeling on frontend
         displacement: data.displacement || undefined,
         batteryCapacity: data.batteryCapacity || undefined,
+        gearbox: data.gearbox || undefined,
+        topSpeed: data.topSpeed || undefined,
+        consumptionMixed: data.consumptionMixed || undefined,
         garage: undefined,
       },
       technical: [
@@ -61,6 +64,9 @@ export async function GET(_req: Request, context: { params: Promise<{ id: string
         data.range ? `Autonomie : ${data.range}` : null,
         data.fastCharge ? `Recharge DC : ${data.fastCharge}` : null,
       ].filter(Boolean),
+      gearbox: data.gearbox || null,
+      topSpeed: data.topSpeed || null,
+      consumptionMixed: data.consumptionMixed || null,
       dimensions: {
         length: data.length || undefined,
         width: data.width || undefined,

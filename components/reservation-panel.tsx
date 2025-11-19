@@ -14,6 +14,8 @@ type ReservationPanelProps = {
 export default function ReservationPanel({ vehicleId, blockedDates = [], minDays = 2, maxDays = 60 }: ReservationPanelProps) {
   const [reserved, setReserved] = useState<Array<{ from: Date; to: Date }>>([])
   const [selected, setSelected] = useState<DateRange | undefined>()
+  const [lastName, setLastName] = useState("")
+  const [firstName, setFirstName] = useState("")
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
   const [loading, setLoading] = useState(true)
@@ -87,7 +89,16 @@ export default function ReservationPanel({ vehicleId, blockedDates = [], minDays
 
   const rangeDays = useMemo(() => selected?.from && selected?.to ? Math.floor((startOfDay(selected.to).getTime() - startOfDay(selected.from).getTime()) / 86400000) + 1 : 0, [selected])
   const validRangeLen = rangeDays === 0 || (rangeDays >= minDays && rangeDays <= maxDays)
-  const canSubmit = !!(selected?.from && selected?.to && email.includes("@") && phone.trim().length >= 6 && validRangeLen && !submitting)
+  const canSubmit = !!(
+    selected?.from &&
+    selected?.to &&
+    lastName.trim().length >= 1 &&
+    firstName.trim().length >= 1 &&
+    email.includes("@") &&
+    phone.trim().length >= 6 &&
+    validRangeLen &&
+    !submitting
+  )
 
   const submit = async () => {
     if (!selected?.from || !selected?.to) return
@@ -105,6 +116,8 @@ export default function ReservationPanel({ vehicleId, blockedDates = [], minDays
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          lastName: lastName.trim(),
+          firstName: firstName.trim(),
           email: email.trim(),
           phone: phone.trim(),
           from: toYMD(selected.from),
@@ -117,6 +130,8 @@ export default function ReservationPanel({ vehicleId, blockedDates = [], minDays
       }
       setSuccess("Votre demande a été envoyée.")
       setSelected(undefined)
+      setLastName("")
+      setFirstName("")
       setEmail("")
       setPhone("")
       const reload = await fetch(`/api/vehicles/${vehicleId}/reservations`, { cache: "no-store" })
@@ -169,6 +184,28 @@ export default function ReservationPanel({ vehicleId, blockedDates = [], minDays
           </ul>
         </div>
         <div className="space-y-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Nom</label>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Nom"
+                className="w-full rounded-md border border-foreground/20 bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/30"
+              />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Prénom</label>
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="Prénom"
+                className="w-full rounded-md border border-foreground/20 bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/30"
+              />
+            </div>
+          </div>
           <div>
             <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Adresse email</label>
             <input
@@ -200,6 +237,16 @@ export default function ReservationPanel({ vehicleId, blockedDates = [], minDays
             {!validRangeLen && (
               <div className="mt-1 text-xs text-red-500">Durée invalide: {minDays} à {maxDays} jours.</div>
             )}
+          </div>
+          <div className="rounded-lg border border-foreground/10 bg-background p-4">
+            <h3 className="text-sm font-semibold text-foreground">Documents à apporter</h3>
+            <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+              <li>• Pièce d'identité</li>
+              <li>• Permis de conduire</li>
+              <li>• Carte VTC</li>
+              <li>• Justificatif de domicile</li>
+              <li>• Caution 300€</li>
+            </ul>
           </div>
           {error && <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>}
           {success && <div className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{success}</div>}

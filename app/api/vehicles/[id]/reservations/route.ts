@@ -60,12 +60,14 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
     const { id } = await context.params
     if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 })
     const body = await req.json().catch(() => null)
+    const lastName = body?.lastName?.toString().trim()
+    const firstName = body?.firstName?.toString().trim()
     const email = body?.email?.toString().trim()
     const phone = body?.phone?.toString().trim()
     const fromRaw = body?.from
     const toRaw = body?.to
 
-    if (!email || !phone || !fromRaw || !toRaw) {
+    if (!lastName || !firstName || !email || !phone || !fromRaw || !toRaw) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 })
     }
 
@@ -134,6 +136,8 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
     // Persist a request (not a reservation)
     const reqRef = await addDoc(collection(db, "reservation_requests"), {
       vehicleId: id,
+      lastName,
+      firstName,
       email,
       phone,
       from: Timestamp.fromDate(from),
@@ -152,6 +156,8 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
       vehicleId: id,
       vehicleName: vdata?.name || null,
       vehicleCategory: vdata?.vehicleType || vdata?.motorization || null,
+      lastName,
+      firstName,
       email,
       phone,
       from: Timestamp.fromDate(from),

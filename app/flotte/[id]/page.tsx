@@ -22,6 +22,16 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
     ?? vehicle?.specs?.displacement
     ?? vehicle?.specs?.cylindree
 
+  // Hybrid-specific technical display
+  const motor = String(vehicle?.specs?.motorisation || vehicle?.category || "").toLowerCase()
+  const isHybrid = motor.includes("hybr")
+  const hybridTechnical: string[] = [
+    `Energie : Hybride`,
+    `Boîte de vitesses : ${vehicle?.specs?.gearbox || vehicle?.gearbox || ""}`,
+    `Vitesse maximale : ${vehicle?.specs?.topSpeed ? `${vehicle.specs.topSpeed} km/h` : (vehicle?.topSpeed ? `${vehicle.topSpeed} km/h` : "")}`,
+    `Consommation mixte : ${vehicle?.specs?.consumptionMixed ? `${vehicle.specs.consumptionMixed} L/100 Km` : (vehicle?.consumptionMixed ? `${vehicle.consumptionMixed} L/100 Km` : "")}`,
+  ]
+
   return (
     <main className="relative min-h-screen bg-background text-foreground">
       <Navbar />
@@ -127,11 +137,11 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             )}
 
             {/* Technique */}
-            {(vehicle.technical || []).length > 0 && (
+            {(isHybrid || (vehicle.technical || []).length > 0) && (
               <div className="space-y-3">
                 <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-muted-foreground">Caractéristiques techniques</h2>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  {(vehicle.technical || []).map((item: string) => (
+                  {(isHybrid ? hybridTechnical : (vehicle.technical || [])).map((item: string) => (
                     <li key={item} className="flex items-start gap-2">
                       <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-foreground/40" />
                       {item}
