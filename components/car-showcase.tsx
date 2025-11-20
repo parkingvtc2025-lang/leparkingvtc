@@ -147,7 +147,12 @@ export default function CarShowcase() {
     <div className="relative w-full overflow-hidden bg-background pt-16">
       {/* Carousel Container */}
       <div className="relative h-[100svh] lg:h-[100dvh] flex items-center justify-center">
-        <div className="absolute top-10 left-6 right-6 z-30 mx-auto max-w-lg space-y-5 md:left-12 md:right-auto md:mx-0">
+        <div className="absolute top-10 left-6 right-6 z-30 mx-auto max-w-md lg:hidden">
+          <h1 className="text-2xl font-light leading-tight text-foreground">
+            Votre partenaire VTC premium
+          </h1>
+        </div>
+        <div className="absolute top-10 left-6 right-6 z-30 mx-auto max-w-lg space-y-5 md:left-12 md:right-auto md:mx-0 hidden lg:block">
           <p className="text-xs tracking-[0.4em] text-muted-foreground/80 uppercase md:text-sm">
             COLLECTION PRIVÉE
           </p>

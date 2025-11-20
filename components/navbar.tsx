@@ -54,7 +54,7 @@ export default function Navbar() {
     { label: "Accueil", href: "/" },
     { label: "À propos", href: "/#about" },
     { label: "Documents", href: "/documents" },
-    { label: "Notre flotte", href: "/flotte" },
+    { label: "Véhicules électriques / hybrides", href: "/flotte" },
     { label: "Blog", href: "/#blog" },
   ]
 
@@ -62,7 +62,7 @@ export default function Navbar() {
     { label: "Accueil", href: "/" },
     { label: "À propos", href: "/#about" },
     { label: "Documents", href: "/documents" },
-    { label: "Notre flotte", href: "/flotte" },
+    { label: "Véhicules électriques / hybrides", href: "/flotte" },
     { label: "Blog", href: "/#blog" },
   ]
 

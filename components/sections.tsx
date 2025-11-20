@@ -253,11 +253,13 @@ export function ProductsSection() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="text-center md:text-left">
           <p className="text-xs uppercase tracking-[0.55em] text-muted-foreground">Notre flotte</p>
-          <h2 className="mt-4 text-4xl md:text-5xl font-bold text-foreground text-balance">Présentée avec caractère</h2>
-          <p className="mt-3 md:mt-4 max-w-2xl text-sm md:text-base text-muted-foreground">
+          <h2 className="mt-3 text-2xl md:mt-4 md:text-5xl font-bold text-foreground text-balance">
+            Présentée avec caractère
+          </h2>
+          <p className="mt-3 md:mt-4 max-w-2xl text-sm md:text-base text-muted-foreground hidden md:block">
             Une mise en avant inspirée, trois modèles visibles, le centre en focus. Élégant, fluide, professionnel.
           </p>
-          <div className="mt-6">
+          <div className="mt-4 md:mt-6">
             <Link href="/flotte" className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-primary-foreground shadow-lg transition-transform hover:-translate-y-0.5 hover:shadow-xl">
               Voir toute la flotte
               <ArrowUpRight className="h-4 w-4" />
@@ -280,8 +282,8 @@ export function ProductsSection() {
           <div className="mx-auto max-w-6xl px-6 text-sm text-muted-foreground">{error}</div>
         ) : (
           <div
-            className="flex items-stretch select-none"
-            style={{ gap: "1.25rem", transform: `translateX(calc(50% - ${(index + 0.5) * (100 / itemsPerView)}%))`, transition: "transform 650ms cubic-bezier(0.22, 1, 0.36, 1)" }}
+            className="flex items-stretch select-none gap-0 md:gap-5"
+            style={{ transform: `translateX(calc(50% - ${(index + 0.5) * (100 / itemsPerView)}%))`, transition: "transform 650ms cubic-bezier(0.22, 1, 0.36, 1)" }}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             onTouchStart={(e) => {
