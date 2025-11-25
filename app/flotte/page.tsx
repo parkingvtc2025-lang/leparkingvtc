@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { useEffect, useMemo, useState } from "react"
+import { Suspense, useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import Navbar from "@/components/navbar"
 import FloatingContact from "@/components/floating-contact"
@@ -31,7 +31,7 @@ function resolveTag(category: string) {
   return "all"
 }
 
-export default function FleetPage() {
+function FleetPageContent() {
   const [vehicles, setVehicles] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -383,5 +383,13 @@ export default function FleetPage() {
       )}
       <FloatingContact />
     </main>
+  )
+}
+
+export default function FleetPage() {
+  return (
+    <Suspense fallback={<main className="relative min-h-screen bg-background text-foreground" />}> 
+      <FleetPageContent />
+    </Suspense>
   )
 }
