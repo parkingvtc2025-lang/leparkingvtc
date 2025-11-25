@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import Navbar from "@/components/navbar"
 import FloatingContact from "@/components/floating-contact"
 import ImageCarousel from "@/components/image-carousel"
@@ -43,6 +44,17 @@ export default function FleetPage() {
   const [sortBy, setSortBy] = useState<"new" | "priceAsc" | "priceDesc">("new")
   const [priceCap, setPriceCap] = useState<number | null>(null)
   const [descOpen, setDescOpen] = useState(false)
+  const searchParams = useSearchParams()
+
+  // Sync initial filter with query param (e.g., /flotte?type=hybride)
+  useEffect(() => {
+    const qp = searchParams.get("type")
+    if (qp === "electrique" || qp === "hybride" || qp === "thermique") {
+      setType(qp)
+    } else if (qp === "all") {
+      setType("all")
+    }
+  }, [searchParams])
 
   useEffect(() => {
     let isMounted = true
@@ -197,9 +209,11 @@ export default function FleetPage() {
                       sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
                       priorityFirst={false}
                     />
-                    <div className="absolute left-3 top-3 rounded-sm bg-foreground/90 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-background">
-                      {vehicle.badges?.[0] ?? "Disponible"}
-                    </div>
+                    {false && (
+                      <div className="absolute left-3 top-3 rounded-sm bg-foreground/90 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-background">
+                        {vehicle.badges?.[0]}
+                      </div>
+                    )}
                   </div>
                   <div className="flex flex-1 flex-col gap-3 p-5">
                     <div className="space-y-1">

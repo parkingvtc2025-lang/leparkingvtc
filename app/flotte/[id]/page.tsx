@@ -74,11 +74,13 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
                 Retour à la flotte
               </Link>
               <div className="flex flex-wrap gap-2">
-                {(vehicle.badges || []).map((badge: string) => (
-                  <span key={badge} className="rounded-full border border-foreground/25 bg-foreground/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.35em] text-foreground">
-                    {badge}
-                  </span>
-                ))}
+                {(vehicle.badges || [])
+                  .filter((b: string) => !/^disponible$/i.test(b))
+                  .map((badge: string) => (
+                    <span key={badge} className="rounded-full border border-foreground/25 bg-foreground/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.35em] text-foreground">
+                      {badge}
+                    </span>
+                  ))}
               </div>
             </div>
 
