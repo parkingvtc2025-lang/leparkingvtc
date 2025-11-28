@@ -15,7 +15,7 @@ export default function ReservationModal({ vehicleId, blockedDates = [], minDays
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-primary-foreground shadow-lg transition hover:shadow-xl mb-[10px]">
+        <button className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-6 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-white shadow-lg transition hover:shadow-xl mb-[10px]">
           Réserver ce véhicule
           <ArrowUpRight className="h-4 w-4" />
         </button>

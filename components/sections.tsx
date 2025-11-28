@@ -145,7 +145,7 @@ export function DocumentsSection() {
         <div className="mt-10 flex justify-center">
           <Link
             href="#contact"
-            className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-primary-foreground shadow-lg transition-transform hover:-translate-y-0.5 hover:shadow-xl"
+            className="inline-flex items-center gap-2 rounded-md bg-emerald-600 px-5 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-white shadow-lg transition-transform hover:-translate-y-0.5 hover:shadow-xl"
           >
             Soumettre vos documents
             <ArrowUpRight className="h-4 w-4" />
@@ -160,6 +160,12 @@ export function ProductsSection() {
   const [raw, setRaw] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  const sanitize = (s: any) => {
+    if (s == null) return s
+    const str = String(s)
+    return str.replace(/\b(v[ée]hicule\s+)?disponible\b/gi, "").replace(/\s{2,}/g, " ").trim()
+  }
 
   const parseEuro = (s: any): number | null => {
     if (!s || typeof s !== "string") return null
@@ -176,11 +182,11 @@ export function ProductsSection() {
       const createdAtSec = v?.createdAt?.seconds || 0
       return {
         id: v.id,
-        name: v.name,
+        name: sanitize(v.name),
         image: Array.isArray(v.imageUrls) && v.imageUrls.length > 0 ? v.imageUrls[0] : v.image,
         weeklyPrice: v.weeklyPrice,
         monthlyPrice: v.monthlyPrice,
-        badges: Array.isArray(v.badges) ? v.badges : [],
+        tags: Array.isArray(v.tags) ? v.tags : [],
         eligibility: v.eligibility,
         createdAtSec,
         priceNum,
@@ -260,7 +266,7 @@ export function ProductsSection() {
             Une mise en avant inspirée, trois modèles visibles, le centre en focus. Élégant, fluide, professionnel.
           </p>
           <div className="mt-4 md:mt-6">
-            <Link href="/flotte" className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-primary-foreground shadow-lg transition-transform hover:-translate-y-0.5 hover:shadow-xl">
+            <Link href="/flotte" className="inline-flex items-center gap-2 rounded-md bg-emerald-600 px-5 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-white shadow-lg transition-transform hover:-translate-y-0.5 hover:shadow-xl">
               Voir toute la flotte
               <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -324,8 +330,17 @@ export function ProductsSection() {
                       <div>
                         <h3 className="text-lg md:text-xl font-semibold text-foreground">{v.name}</h3>
                         <p className="text-xs text-muted-foreground md:text-sm">{v.weeklyPrice || "—"}</p>
-                        {(v.badges?.[0] || v.eligibility) && (
-                          <span className="mt-1 inline-block text-[10px] uppercase tracking-[0.3em] text-muted-foreground">{v.badges?.[0] || v.eligibility}</span>
+                        {!!(v.tags && v.tags.length) && (
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            {v.tags
+                              .filter((t: any) => !/disponible/i.test(String(t)))
+                              .slice(0, 3)
+                              .map((t: any, idx: number) => (
+                                <span key={idx} className="rounded-sm bg-emerald-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-white">
+                                  {sanitize(t)}
+                                </span>
+                              ))}
+                          </div>
                         )}
                       </div>
                       <span className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.25em] text-primary-foreground">Voir <ArrowUpRight className="h-3 w-3" /></span>

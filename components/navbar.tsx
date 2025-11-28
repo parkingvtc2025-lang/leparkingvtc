@@ -52,19 +52,19 @@ export default function Navbar() {
 
   const navLinks = [
     { label: "Accueil", href: "/" },
-    { label: "À propos", href: "/#about" },
-    { label: "Documents", href: "/documents" },
     { label: "Véhicules hybrides", href: "/flotte?type=hybride" },
     { label: "Véhicules électriques", href: "/flotte?type=electrique" },
+    { label: "À propos", href: "/#about" },
+    { label: "Documents", href: "/documents" },
     { label: "Blog", href: "/#blog" },
   ]
 
   const pillItems = [
     { label: "Accueil", href: "/" },
-    { label: "À propos", href: "/#about" },
-    { label: "Documents", href: "/documents" },
     { label: "Véhicules hybrides", href: "/flotte?type=hybride" },
     { label: "Véhicules électriques", href: "/flotte?type=electrique" },
+    { label: "À propos", href: "/#about" },
+    { label: "Documents", href: "/documents" },
     { label: "Blog", href: "/#blog" },
   ]
 
@@ -89,9 +89,9 @@ export default function Navbar() {
             className="custom-nav"
             ease="power2.easeOut"
             baseColor="#0b0b0b"
-            pillColor="#ffffff"
+            pillColor="#059669" 
             hoveredPillTextColor="#ffffff"
-            pillTextColor="#000000"
+            pillTextColor="#ffffff"
             onMobileMenuClick={() => {}}
           />
         </div>
@@ -108,14 +108,14 @@ export default function Navbar() {
               <Link
                 key={href}
                 href={href}
-                className="rounded bg-secondary/30 px-4 py-1.5 hover:bg-secondary/50 transition-colors"
+                className="rounded bg-emerald-600 text-white px-4 py-1.5 hover:opacity-90 transition-opacity"
               >
                 {label}
               </Link>
             ))}
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="rounded bg-primary px-3 py-1.5 text-primary-foreground hover:opacity-90 transition-opacity"
+              className="rounded bg-emerald-600 px-3 py-1.5 text-white hover:opacity-90 transition-opacity"
               aria-label="Remonter en haut"
             >
               <ArrowUp className="w-4 h-4" />

@@ -36,7 +36,7 @@ function FleetPageContent() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [q, setQ] = useState("")
-  const [type, setType] = useState<"all" | "electrique" | "hybride" | "thermique">("all")
+  const [type, setType] = useState<"all" | "electrique" | "hybride" | "berline">("all")
   const [priceMin, setPriceMin] = useState<string>("")
   const [priceMax, setPriceMax] = useState<string>("")
   const [panelOpen, setPanelOpen] = useState(false)
@@ -46,11 +46,17 @@ function FleetPageContent() {
   const [descOpen, setDescOpen] = useState(false)
   const searchParams = useSearchParams()
 
+  const sanitize = (s: any) => {
+    if (s == null) return s
+    const str = String(s)
+    return str.replace(/\b(v[ée]hicule\s+)?disponible\b/gi, "").replace(/\s{2,}/g, " ").trim()
+  }
+
   // Sync initial filter with query param (e.g., /flotte?type=hybride)
   useEffect(() => {
     const qp = searchParams.get("type")
-    if (qp === "electrique" || qp === "hybride" || qp === "thermique") {
-      setType(qp)
+    if (qp === "electrique" || qp === "hybride" || qp === "berline") {
+      setType(qp as any)
     } else if (qp === "all") {
       setType("all")
     }
@@ -103,9 +109,10 @@ function FleetPageContent() {
       }
       if (type !== "all") {
         const cat = (v?.category || "").toLowerCase()
+        const tags: string[] = Array.isArray(v?.tags) ? v.tags.map((x: any) => String(x).toLowerCase()) : []
         if (type === "electrique" && !(cat.includes("electrique") || cat.includes("électrique"))) return false
         if (type === "hybride" && !(cat.includes("hybride") || cat.includes("hybrid"))) return false
-        if (type === "thermique" && (cat.includes("electrique") || cat.includes("électrique") || cat.includes("hybride") || cat.includes("hybrid"))) return false
+        if (type === "berline" && !(v?.isBerline === true || tags.includes("berline") || cat.includes("berline"))) return false
       }
       if (min != null || max != null) {
         const pm = toMonthly(v)
@@ -167,7 +174,7 @@ function FleetPageContent() {
           <div className="flex flex-wrap items-center gap-2">
             <button onClick={() => setType(type === "electrique" ? "all" : "electrique")} className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] border ${type === "electrique" ? "bg-primary text-primary-foreground border-primary" : "bg-card border-foreground/20"}`}>Électrique</button>
             <button onClick={() => setType(type === "hybride" ? "all" : "hybride")} className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] border ${type === "hybride" ? "bg-primary text-primary-foreground border-primary" : "bg-card border-foreground/20"}`}>Hybride</button>
-            <button onClick={() => setType(type === "thermique" ? "all" : "thermique")} className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] border ${type === "thermique" ? "bg-primary text-primary-foreground border-primary" : "bg-card border-foreground/20"}`}>Thermique</button>
+            <button onClick={() => setType(type === "berline" ? "all" : "berline")} className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] border ${type === "berline" ? "bg-primary text-primary-foreground border-primary" : "bg-card border-foreground/20"}`}>Berline</button>
           </div>
           <div className="flex items-center gap-3">
             <label className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Budget mensuel</label>
@@ -223,11 +230,23 @@ function FleetPageContent() {
                         <span className="text-sm md:text-base font-semibold text-foreground">{vehicle.monthlyPrice || "—"}</span>
                         <span className="text-xs text-muted-foreground">{vehicle.weeklyPrice || "—"}</span>
                       </div>
+                      {!!(Array.isArray(vehicle.tags) && vehicle.tags.length) && (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {vehicle.tags
+                            .filter((t: any) => !/disponible/i.test(String(t)))
+                            .slice(0, 4)
+                            .map((t: any, idx: number) => (
+                              <span key={idx} className="rounded-sm bg-emerald-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-white">
+                                {String(t)}
+                              </span>
+                            ))}
+                        </div>
+                      )}
                     </div>
                     <p className="text-xs text-muted-foreground line-clamp-3">{vehicle.summary}</p>
                     <div className="mt-auto flex items-center justify-between text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
                       <span>{tag !== "all" ? tagMap[tag] : vehicle.category}</span>
-                      <span className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-[10px] font-semibold tracking-[0.25em] text-primary-foreground">Voir</span>
+                      <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-600 px-3 py-1.5 text-[10px] font-semibold tracking-[0.25em] text-white">Voir</span>
                     </div>
                   </div>
                 </Link>
@@ -332,6 +351,14 @@ function FleetPageContent() {
                   >
                     <Leaf className="h-3.5 w-3.5" />
                     Hybride
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setType("berline")}
+                    className={`inline-flex items-center justify-center gap-2 rounded-md border px-3 py-1.5 text-[11px] uppercase tracking-[0.3em] ${type === "berline" ? "border-primary bg-primary text-primary-foreground" : "border-foreground/20 text-foreground hover:border-foreground/40"}`}
+                  >
+                    <Filter className="h-3.5 w-3.5" />
+                    Berline
                   </button>
                 </div>
               </div>

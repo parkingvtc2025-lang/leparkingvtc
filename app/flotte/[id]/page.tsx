@@ -32,6 +32,15 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
     `Consommation mixte : ${vehicle?.specs?.consumptionMixed ? `${vehicle.specs.consumptionMixed} L/100 Km` : (vehicle?.consumptionMixed ? `${vehicle.consumptionMixed} L/100 Km` : "")}`,
   ]
 
+  const sanitize = (s: any) => {
+    if (s == null) return s
+    const str = String(s)
+    return str.replace(/\b(v[ée]hicule\s+)?disponible\b/gi, "").replace(/\s{2,}/g, " ").trim()
+  }
+  const displayCategory = sanitize(vehicle.category)
+  const displayName = sanitize(vehicle.name)
+  const displaySummary = sanitize(vehicle.summary)
+
   return (
     <main className="relative min-h-screen bg-background text-foreground">
       <Navbar />
@@ -73,21 +82,25 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
                 <ArrowLeft className="h-4 w-4" />
                 Retour à la flotte
               </Link>
-              <div className="flex flex-wrap gap-2">
-                {(vehicle.badges || [])
-                  .filter((b: string) => !/^disponible$/i.test(b))
-                  .map((badge: string) => (
-                    <span key={badge} className="rounded-full border border-foreground/25 bg-foreground/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.35em] text-foreground">
-                      {badge}
-                    </span>
-                  ))}
-              </div>
+              {/* Badges intentionally hidden */}
             </div>
 
             <header className="space-y-3">
-              <p className="text-xs uppercase tracking-[0.45em] text-muted-foreground">{vehicle.category}</p>
-              <h1 className="text-3xl md:text-5xl font-semibold text-foreground">{vehicle.name}</h1>
-              <p className="max-w-prose text-sm md:text-base text-muted-foreground">{vehicle.summary}</p>
+              <p className="text-xs uppercase tracking-[0.45em] text-muted-foreground">{displayCategory}</p>
+              <h1 className="text-3xl md:text-5xl font-semibold text-foreground">{displayName}</h1>
+              <p className="max-w-prose text-sm md:text-base text-muted-foreground">{displaySummary}</p>
+              {!!(Array.isArray(vehicle.tags) && vehicle.tags.length) && (
+                <div className="mt-1.5 flex flex-wrap gap-1.5">
+                  {vehicle.tags
+                    .filter((t: any) => !/disponible/i.test(String(t)))
+                    .slice(0, 6)
+                    .map((t: any, idx: number) => (
+                      <span key={idx} className="rounded-sm bg-emerald-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-white">
+                        {String(t)}
+                      </span>
+                    ))}
+                </div>
+              )}
             </header>
 
             {/* Pricing + eligibility */}

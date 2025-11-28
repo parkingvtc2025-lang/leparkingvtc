@@ -32,11 +32,13 @@ export async function GET() {
         image,
         imageUrls: deduped,
         category: data.vehicleType || data.motorization || "Véhicule",
-        badges: ["Disponible"],
+        isBerline: !!data.isBerline,
+        tags: Array.isArray(data.tags) ? data.tags : [],
+        badges: Array.isArray(data.badges) ? data.badges : (Array.isArray(data.tags) ? data.tags : []),
         eligibility: data.uberEligible ? "ÉLIGIBILITÉ UBER" : undefined,
         weeklyPrice: weeklyNum != null ? `${weeklyNum} € / semaine` : null,
         monthlyPrice: monthlyNum != null ? `${monthlyNum} € / mois` : null,
-        summary: data.summary || "Véhicule disponible.",
+        summary: data.summary || "",
       }
     })
 

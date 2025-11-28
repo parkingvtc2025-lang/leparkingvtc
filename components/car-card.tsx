@@ -14,6 +14,7 @@ interface Car {
   horsepower?: number
   acceleration?: string
   topSpeed?: number
+  tags?: string[]
 }
 
 interface CarCardProps {
@@ -24,31 +25,8 @@ interface CarCardProps {
 export default function CarCard({ car, isActive }: CarCardProps) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center px-6 py-12 bg-background relative">
-      {/* Background Tagline */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="text-9xl md:text-[200px] font-bold text-foreground/5 select-none whitespace-nowrap">
-          {car.tagline || ""}
-        </div>
-      </div>
 
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 h-96 flex items-center justify-center pointer-events-none hidden lg:flex">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-px h-12 bg-foreground/30"></div>
-          <div
-            className={`text-lg font-semibold tracking-widest text-foreground/60 transition-all duration-1000 ${
-              isActive ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
-            }`}
-            style={{
-              writingMode: "vertical-rl",
-              textOrientation: "mixed",
-              transform: isActive ? "translateX(0)" : "translateX(-32px)",
-            }}
-          >
-            {car.tagline || ""}
-          </div>
-          <div className="w-px h-12 bg-foreground/30"></div>
-        </div>
-      </div>
+      {/* Removed side vertical tagline to only keep subtle background label */}
 
       {/* Content Container */}
       <div className="relative z-10 w-full max-w-6xl flex flex-col items-center gap-8">
@@ -74,8 +52,23 @@ export default function CarCard({ car, isActive }: CarCardProps) {
           }`}
         >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-2">{car.name}</h2>
-          {car.model && <p className="text-lg text-muted-foreground mb-6">{car.model}</p>}
-          {car.description && <p className="text-sm text-muted-foreground italic mb-8">{car.description}</p>}
+          {car.model && !/disponible/i.test(String(car.model)) && (
+            <p className="text-lg text-muted-foreground mb-6">{car.model}</p>
+          )}
+          {/* Description intentionally hidden to avoid displaying availability/status-like text */}
+
+          {!!(car.tags && car.tags.length) && (
+            <div className="mb-4 flex flex-wrap items-center justify-center gap-1.5">
+              {(car.tags || [])
+                .filter((t: any) => !/disponible/i.test(String(t)))
+                .slice(0, 4)
+                .map((t: any, idx: number) => (
+                  <span key={idx} className="rounded-sm bg-emerald-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-white">
+                    {String(t)}
+                  </span>
+                ))}
+            </div>
+          )}
 
           {(car.horsepower != null || car.acceleration || car.topSpeed != null) && (
             <div className="flex flex-wrap items-center justify-center gap-6 mb-8">
@@ -103,7 +96,7 @@ export default function CarCard({ car, isActive }: CarCardProps) {
           <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
             <Link
               href={`/flotte/${car.id}`}
-              className="relative px-8 py-3 border-2 border-foreground text-foreground font-medium rounded-lg overflow-hidden transition-all duration-500 transform hover:scale-105 hover:-rotate-1 hover:shadow-[0_20px_35px_rgba(15,23,42,0.25)]"
+              className="relative px-8 py-3 rounded-lg bg-emerald-600 text-white font-semibold uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 transform hover:scale-105 hover:-rotate-1 hover:shadow-[0_20px_35px_rgba(15,23,42,0.25)]"
             >
               Réserver
             </Link>

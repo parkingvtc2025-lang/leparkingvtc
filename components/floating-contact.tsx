@@ -9,7 +9,7 @@ export default function FloatingContact() {
     <div className="fixed left-6 bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] z-[1000] pointer-events-auto">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-2 rounded bg-primary px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-primary-foreground shadow-lg transition-transform hover:-translate-y-0.5 hover:shadow-xl"
+        className="inline-flex items-center gap-2 rounded bg-emerald-600 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg transition-transform hover:-translate-y-0.5 hover:shadow-xl"
         aria-expanded={open}
         aria-label="Ouvrir le contact"
       >
@@ -33,7 +33,7 @@ export default function FloatingContact() {
               className="flex items-center gap-3 rounded border border-border/40 px-3 py-2 transition-colors hover:bg-secondary"
               title="WhatsApp"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded bg-primary text-primary-foreground">
+              <span className="flex h-9 w-9 items-center justify-center rounded bg-emerald-600 text-white">
                 <MessageCircle className="w-4 h-4" />
               </span>
               <div className="flex flex-col leading-tight">
@@ -46,7 +46,7 @@ export default function FloatingContact() {
               className="flex items-center gap-3 rounded border border-border/40 px-3 py-2 transition-colors hover:bg-secondary"
               title="Téléphone"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded bg-primary text-primary-foreground">
+              <span className="flex h-9 w-9 items-center justify-center rounded bg-emerald-600 text-white">
                 <Phone className="w-4 h-4" />
               </span>
               <div className="flex flex-col leading-tight">
@@ -59,7 +59,7 @@ export default function FloatingContact() {
               className="flex items-center gap-3 rounded border border-border/40 px-3 py-2 transition-colors hover:bg-secondary"
               title="Email"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded bg-primary text-primary-foreground">
+              <span className="flex h-9 w-9 items-center justify-center rounded bg-emerald-600 text-white">
                 <Mail className="w-4 h-4" />
               </span>
               <div className="flex flex-col leading-tight">

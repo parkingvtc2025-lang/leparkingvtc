@@ -89,7 +89,7 @@ export default function Chatbot() {
       {/* Chatbot Button - bottom right */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed right-[calc(env(safe-area-inset-right)+1.5rem)] bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] z-[1000] rounded-full bg-primary p-3 text-primary-foreground shadow-lg transition-transform hover:scale-105 pointer-events-auto"
+        className="fixed right-[calc(env(safe-area-inset-right)+1.5rem)] bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] z-[1000] rounded-full bg-emerald-600 p-3 text-white shadow-lg transition-transform hover:scale-105 pointer-events-auto"
         aria-label="Open chatbot"
       >
         {isOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />}
@@ -99,7 +99,7 @@ export default function Chatbot() {
       {isOpen && (
         <div className="fixed right-[calc(env(safe-area-inset-right)+1.5rem)] bottom-[calc(env(safe-area-inset-bottom)+5rem)] z-[1000] flex h-[24rem] max-h-[80svh] w-[calc(100vw-2.5rem)] max-w-md flex-col overflow-hidden rounded-2xl border border-border/20 bg-background shadow-xl transition-transform pointer-events-auto">
           {/* Header */}
-          <div className="bg-primary text-primary-foreground px-6 py-4 flex items-center justify-between">
+          <div className="bg-emerald-600 text-white px-6 py-4 flex items-center justify-between">
             <div>
               <h3 className="font-semibold text-sm sm:text-base">Le Parking VTC</h3>
               <p className="text-xs opacity-80">En ligne</p>
@@ -142,12 +142,12 @@ export default function Chatbot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Votre message..."
-              className="flex-1 px-3 py-2 bg-secondary rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/25"
+              className="flex-1 px-3 py-2 bg-secondary rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/25"
             />
             <button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="p-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="p-2 bg-emerald-600 text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
             >
               <Send className="w-4 h-4" />
             </button>

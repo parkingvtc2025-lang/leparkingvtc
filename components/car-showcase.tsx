@@ -74,6 +74,12 @@ export default function CarShowcase() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const sanitize = (s: any) => {
+    if (s == null) return s
+    const str = String(s)
+    return str.replace(/\b(v[ée]hicule\s+)?disponible\b/gi, "").replace(/\s{2,}/g, " ").trim()
+  }
+
   useEffect(() => {
     let mounted = true
     ;(async () => {
@@ -86,20 +92,32 @@ export default function CarShowcase() {
         if (!mounted) return
         const list = Array.isArray(data.vehicles) ? data.vehicles : []
         // Map API vehicles to CarCard shape
-        const mapped = list.map((v: any) => ({
-          id: v.id,
-          name: v.name,
-          model: v.category || undefined,
-          color: undefined,
-          image: v.image, // presentationImageUrl prioritized by API
-          tagline: (v.category || "PRÉSENTATION").toString().split(" ")[0]?.toUpperCase(),
-          description: v.summary || "Réservez votre véhicule premium dès maintenant",
-          horsepower: undefined,
-          acceleration: undefined,
-          topSpeed: undefined,
-        }))
+        const mapped = list.map((v: any) => {
+          const cat = String(v?.category || "").toLowerCase()
+          const vehType = String(v?.vehicleType || "").toLowerCase()
+          const motor = String(v?.motorization || "").toLowerCase()
+          const tags = Array.isArray(v?.tags) ? v.tags : Array.isArray(v?.badges) ? v.badges : []
+          const hay = [cat, vehType, motor, ...tags.map((t: any) => String(t).toLowerCase())].join(" ")
+          let typeLabel: string | undefined
+          if (hay.includes("électrique") || hay.includes("electrique") || hay.includes("electric")) typeLabel = "Électrique"
+          else if (hay.includes("hybride") || hay.includes("hybrid")) typeLabel = "Hybride"
+          return {
+            id: v.id,
+            name: sanitize(v.name),
+            model: typeLabel, // only show type if electric/hybrid
+            color: undefined,
+            image: v.image,
+            tagline: undefined,
+            description: undefined,
+            tags,
+            horsepower: undefined,
+            acceleration: undefined,
+            topSpeed: undefined,
+          }
+        })
         setVehicles(mapped)
-        setCurrentIndex(0)
+        const prefer = mapped.findIndex((c: any) => String(c?.name || "").toLowerCase().includes("tesla model y"))
+        setCurrentIndex(prefer >= 0 ? prefer : 0)
       } catch (e) {
         if (mounted) setError("Impossible de charger les véhicules.")
       } finally {
