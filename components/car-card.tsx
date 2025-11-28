@@ -61,7 +61,6 @@ export default function CarCard({ car, isActive }: CarCardProps) {
             <div className="mb-4 flex flex-wrap items-center justify-center gap-1.5">
               {(car.tags || [])
                 .filter((t: any) => !/disponible/i.test(String(t)))
-                .slice(0, 4)
                 .map((t: any, idx: number) => (
                   <span key={idx} className="rounded-sm bg-emerald-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-white">
                     {String(t)}
@@ -96,7 +95,7 @@ export default function CarCard({ car, isActive }: CarCardProps) {
           <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
             <Link
               href={`/flotte/${car.id}`}
-              className="relative px-8 py-3 rounded-lg bg-emerald-600 text-white font-semibold uppercase tracking-[0.2em] overflow-hidden transition-all duration-500 transform hover:scale-105 hover:-rotate-1 hover:shadow-[0_20px_35px_rgba(15,23,42,0.25)]"
+              className="relative px-8 py-3 rounded-lg border border-emerald-600 text-emerald-600 font-semibold uppercase tracking-[0.2em] overflow-hidden transition-all duration-300 hover:bg-emerald-50"
             >
               Réserver
             </Link>

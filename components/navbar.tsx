@@ -89,9 +89,9 @@ export default function Navbar() {
             className="custom-nav"
             ease="power2.easeOut"
             baseColor="#0b0b0b"
-            pillColor="#059669" 
+            pillColor="#ffffff"
             hoveredPillTextColor="#ffffff"
-            pillTextColor="#ffffff"
+            pillTextColor="#000000"
             onMobileMenuClick={() => {}}
           />
         </div>
@@ -108,7 +108,7 @@ export default function Navbar() {
               <Link
                 key={href}
                 href={href}
-                className="rounded bg-emerald-600 text-white px-4 py-1.5 hover:opacity-90 transition-opacity"
+                className="rounded bg-secondary/30 px-4 py-1.5 hover:bg-secondary/50 transition-colors"
               >
                 {label}
               </Link>
