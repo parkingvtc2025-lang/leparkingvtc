@@ -95,19 +95,19 @@ export default function CarCard({ car, isActive }: CarCardProps) {
           <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
             <Link
               href={`/flotte/${car.id}`}
-              className="relative px-8 py-3 rounded-lg border border-emerald-600 text-emerald-600 font-semibold uppercase tracking-[0.2em] overflow-hidden transition-all duration-300 hover:bg-emerald-50"
+              className="relative px-8 py-3 rounded-lg bg-foreground text-primary-foreground font-semibold uppercase tracking-[0.2em] overflow-hidden transition-all duration-300 hover:opacity-90"
             >
               Réserver
             </Link>
             <Link
               href="/flotte"
-              className="px-5 py-2.5 rounded-lg border border-foreground/30 text-foreground text-sm font-medium transition-colors hover:border-foreground/60"
+              className="px-5 py-2.5 rounded-lg bg-foreground text-primary-foreground text-sm font-medium transition-opacity hover:opacity-90"
             >
               Voir nos véhicules
             </Link>
             <a
               href="#about"
-              className="px-5 py-2.5 rounded-lg border border-foreground/30 text-foreground text-sm font-medium transition-colors hover:border-foreground/60"
+              className="px-5 py-2.5 rounded-lg bg-foreground text-primary-foreground text-sm font-medium transition-opacity hover:opacity-90"
             >
               En savoir plus
             </a>

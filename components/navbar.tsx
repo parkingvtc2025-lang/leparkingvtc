@@ -80,7 +80,7 @@ export default function Navbar() {
           isDesktop && isDocked ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
         }`}
       >
-        <div className="mx-auto py-3 flex justify-center">
+        <div className="mx-auto py-0 md:py-3 flex justify-center">
           <PillNav
             logo=""
             logoAlt=""

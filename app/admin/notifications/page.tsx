@@ -13,12 +13,15 @@ type AdminNotification = {
   vehicleId?: string
   vehicleName?: string | null
   vehicleCategory?: string | null
+  firstName?: string | null
+  lastName?: string | null
   email?: string | null
   phone?: string | null
   from?: any
   to?: any
   read?: boolean
   createdAt?: any
+  reservationType?: string | null
 }
 
 function toDate(v: any): Date | null {
@@ -41,6 +44,7 @@ export default function AdminNotificationsPage() {
   const [unreadOnly, setUnreadOnly] = useState(true)
   const [limit, setLimit] = useState(50)
   const [msg, setMsg] = useState<string | null>(null)
+  const [openDetail, setOpenDetail] = useState<AdminNotification | null>(null)
 
   const load = async () => {
     try {
@@ -161,7 +165,13 @@ export default function AdminNotificationsPage() {
                       {isRequest ? (
                         <div>
                           <div className="text-foreground">Demande de réservation pour <strong>{n.vehicleName || n.vehicleId || "Véhicule"}</strong>{n.vehicleCategory ? ` • ${n.vehicleCategory}` : ""}</div>
+                          {(n.firstName || n.lastName) && (
+                            <div className="text-foreground text-xs">Client: {(n.firstName || "")} {(n.lastName || "")}</div>
+                          )}
                           <div className="text-muted-foreground text-xs">{from ? from.toLocaleDateString() : "—"} → {to ? to.toLocaleDateString() : "—"}</div>
+                          {n.reservationType && (
+                            <div className="mt-0.5 inline-flex rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] uppercase tracking-wide text-foreground">{n.reservationType}</div>
+                          )}
                           <div className="text-muted-foreground text-xs">{n.email || "—"} • {n.phone || "—"}</div>
                         </div>
                       ) : (
@@ -173,6 +183,9 @@ export default function AdminNotificationsPage() {
                     </div>
                   </div>
                   <div className="flex flex-none items-center gap-2">
+                    <button onClick={() => setOpenDetail(n)} className="inline-flex items-center gap-2 rounded-md border border-foreground/20 px-3 py-1.5 text-xs hover:border-foreground/40">
+                      Détails
+                    </button>
                     <button onClick={() => markRead(n.id, !n.read)} className="inline-flex items-center gap-2 rounded-md border border-foreground/20 px-3 py-1.5 text-xs hover:border-foreground/40">
                       {n.read ? "Marquer non lue" : "Marquer lue"}
                     </button>
@@ -184,5 +197,60 @@ export default function AdminNotificationsPage() {
         )}
       </div>
     </main>
+
+    {openDetail && (
+      <div className="fixed inset-0 z-50">
+        <div className="absolute inset-0 bg-black/50" onClick={() => setOpenDetail(null)} aria-hidden />
+        <div className="absolute left-1/2 top-1/2 w-[95%] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-xl border border-foreground/15 bg-background p-5 shadow-2xl">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-base font-semibold">Détails de la notification</h2>
+            <button onClick={() => setOpenDetail(null)} className="rounded p-1 hover:bg-secondary" aria-label="Fermer">×</button>
+          </div>
+          <div className="grid gap-3">
+            <div className="rounded-md border border-foreground/15 p-3">
+              <div className="text-xs text-muted-foreground">Type</div>
+              <div className="text-sm font-medium">{openDetail.type}</div>
+            </div>
+            <div className="rounded-md border border-foreground/15 p-3">
+              <div className="text-xs text-muted-foreground">Véhicule</div>
+              <div className="text-sm font-medium">{openDetail.vehicleName || openDetail.vehicleId || "—"}</div>
+              {openDetail.vehicleId && (
+                <div className="text-xs text-muted-foreground">ID: {openDetail.vehicleId}</div>
+              )}
+            </div>
+            {(openDetail.firstName || openDetail.lastName || openDetail.email || openDetail.phone) && (
+              <div className="rounded-md border border-foreground/15 p-3">
+                <div className="text-xs text-muted-foreground">Client</div>
+                {(openDetail.firstName || openDetail.lastName) && (
+                  <div className="text-sm font-medium">{openDetail.firstName || ""} {openDetail.lastName || ""}</div>
+                )}
+                <div className="text-xs text-muted-foreground">{openDetail.email || "—"} • {openDetail.phone || "—"}</div>
+              </div>
+            )}
+            {(openDetail.from || openDetail.to) && (
+              <div className="rounded-md border border-foreground/15 p-3">
+                <div className="text-xs text-muted-foreground">Période</div>
+                <div className="text-sm font-medium">
+                  {(() => { const f = toDate(openDetail.from); const t = toDate(openDetail.to); return `${f ? f.toLocaleDateString() : "—"} → ${t ? t.toLocaleDateString() : "—"}` })()}
+                </div>
+                {openDetail.reservationType && (
+                  <div className="mt-1 inline-flex rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] uppercase tracking-wide text-foreground">{openDetail.reservationType}</div>
+                )}
+              </div>
+            )}
+            <div className="rounded-md border border-foreground/15 p-3">
+              <div className="text-xs text-muted-foreground">Métadonnées</div>
+              <div className="text-xs text-muted-foreground">Notification ID: {openDetail.id}</div>
+              {openDetail.requestId && <div className="text-xs text-muted-foreground">Request ID: {openDetail.requestId}</div>}
+              {openDetail.reservationId && <div className="text-xs text-muted-foreground">Reservation ID: {openDetail.reservationId}</div>}
+              <div className="text-xs text-muted-foreground">Créée: {(() => { const d = toDate(openDetail.createdAt); return d ? d.toLocaleString() : "—" })()}</div>
+            </div>
+          </div>
+          <div className="mt-4 flex items-center justify-end gap-2">
+            <button onClick={() => setOpenDetail(null)} className="inline-flex items-center gap-2 rounded-md border border-foreground/20 px-3 py-2 text-xs font-semibold uppercase tracking-[0.3em] hover:border-foreground/40">Fermer</button>
+          </div>
+        </div>
+      </div>
+    )}
   )
 }

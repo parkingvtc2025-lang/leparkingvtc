@@ -30,6 +30,7 @@ export async function GET() {
         id: d.id,
         name: data.name || "Véhicule",
         image,
+        hasPresentation: !!data.presentationImageUrl,
         imageUrls: deduped,
         category: data.vehicleType || data.motorization || "Véhicule",
         isBerline: !!data.isBerline,

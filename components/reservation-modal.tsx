@@ -11,7 +11,7 @@ type Props = {
   maxDays?: number
 }
 
-export default function ReservationModal({ vehicleId, blockedDates = [], minDays = 2, maxDays = 60 }: Props) {
+export default function ReservationModal({ vehicleId, blockedDates = [], minDays = 7, maxDays = 60 }: Props) {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>

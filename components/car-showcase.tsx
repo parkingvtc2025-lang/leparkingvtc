@@ -91,8 +91,9 @@ export default function CarShowcase() {
         const data = await res.json()
         if (!mounted) return
         const list = Array.isArray(data.vehicles) ? data.vehicles : []
+        const withPresentation = list.filter((v: any) => !!v?.hasPresentation)
         // Map API vehicles to CarCard shape
-        const mapped = list.map((v: any) => {
+        const mapped = withPresentation.map((v: any) => {
           const cat = String(v?.category || "").toLowerCase()
           const vehType = String(v?.vehicleType || "").toLowerCase()
           const motor = String(v?.motorization || "").toLowerCase()

@@ -41,6 +41,22 @@ export async function GET(req: Request) {
     }
     if (unreadOnly) items = items.filter((n: any) => !n.read)
 
+    // Enrich missing reservationType from linked reservation_requests
+    try {
+      const needEnrich = items.filter((n: any) => n.type === "reservation.requested" && !n.reservationType && n.requestId)
+      if (needEnrich.length) {
+        const enriched = await Promise.all(needEnrich.map(async (n: any) => {
+          try {
+            const req = await (await import("firebase/firestore")).getDoc((await import("firebase/firestore")).doc(db, "reservation_requests", n.requestId))
+            const rdata = req.exists() ? (req.data() as any) : null
+            return { id: n.id, reservationType: rdata?.type || null }
+          } catch { return { id: n.id, reservationType: null } }
+        }))
+        const mapType = new Map(enriched.map((e) => [e.id, e.reservationType]))
+        items = items.map((n: any) => (mapType.has(n.id) ? { ...n, reservationType: mapType.get(n.id) } : n))
+      }
+    } catch {}
+
     return NextResponse.json({ notifications: items })
   } catch (e) {
     return NextResponse.json({ error: "Failed to list notifications" }, { status: 500 })

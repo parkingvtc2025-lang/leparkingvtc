@@ -22,18 +22,21 @@ export async function GET(req: Request) {
       const vref = data.vehicleId ? doc(db, "vehicles", data.vehicleId) : null
       let vehicleName: string | null = null
       let vehicleCategory: string | null = null
+      let registrationNumber: string | null = null
       if (vref) {
         const vsnap = await getDoc(vref)
         if (vsnap.exists()) {
           const vdata = vsnap.data() as any
           vehicleName = vdata?.name || null
           vehicleCategory = vdata?.vehicleType || vdata?.motorization || null
+          registrationNumber = vdata?.registrationNumber || null
         }
       }
       const toYMD = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
       return {
         id: d.id,
         vehicleId: data.vehicleId,
+        reservationType: data.reservationType || data.type || null,
         email: data.email,
         phone: data.phone,
         from: data.from?.toDate ? toYMD(data.from.toDate()) : (data.from ?? null),
@@ -42,6 +45,7 @@ export async function GET(req: Request) {
         createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : (data.createdAt ?? null),
         vehicleName,
         vehicleCategory,
+        registrationNumber,
       }
     }))
 
@@ -49,8 +53,8 @@ export async function GET(req: Request) {
     reservations.sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
 
     if (format === "csv") {
-      const header = ["id","vehicleId","vehicleName","from","to","status","email","phone","createdAt"].join(",")
-      const rows = reservations.map((r: any) => [r.id, r.vehicleId, sanitizeCsv(r.vehicleName), r.from, r.to, r.status, r.email, r.phone, r.createdAt].join(","))
+      const header = ["id","vehicleId","vehicleName","registrationNumber","reservationType","from","to","status","email","phone","createdAt"].join(",")
+      const rows = reservations.map((r: any) => [r.id, r.vehicleId, sanitizeCsv(r.vehicleName), sanitizeCsv(r.registrationNumber), r.reservationType || "", r.from, r.to, r.status, r.email, r.phone, r.createdAt].join(","))
       const csv = [header, ...rows].join("\n")
       return new NextResponse(csv, {
         headers: {

@@ -11,12 +11,14 @@ type AdminReservation = {
   vehicleId: string
   vehicleName?: string | null
   vehicleCategory?: string | null
+  registrationNumber?: string | null
   email: string
   phone: string
   from: string
   to: string
   status: string
   createdAt?: string | null
+  reservationType?: string | null
 }
 
 export default function AdminReservationsPage() {
@@ -25,6 +27,7 @@ export default function AdminReservationsPage() {
   const [error, setError] = useState<string | null>(null)
   const [query, setQuery] = useState("")
   const [vehicleFilter, setVehicleFilter] = useState("")
+  const [openDetailId, setOpenDetailId] = useState<string | null>(null)
 
   // editor modal state
   const [editing, setEditing] = useState<AdminReservation | null>(null)
@@ -65,6 +68,22 @@ export default function AdminReservationsPage() {
       return hay.includes(q)
     })
   }, [all, query])
+
+  const fmt = (ymd?: string | null) => {
+    if (!ymd) return "—"
+    const d = new Date(ymd)
+    if (isNaN(d.getTime())) return ymd
+    return d.toLocaleDateString()
+  }
+
+  const diffDays = (a?: string | null, b?: string | null) => {
+    if (!a || !b) return null
+    const da = new Date(a)
+    const db = new Date(b)
+    if (isNaN(da.getTime()) || isNaN(db.getTime())) return null
+    const ms = db.setHours(0,0,0,0) - da.setHours(0,0,0,0)
+    return Math.max(1, Math.round(ms / 86400000))
+  }
 
   const toggleCancel = async (r: AdminReservation) => {
     try {
@@ -240,30 +259,77 @@ export default function AdminReservationsPage() {
               </thead>
               <tbody>
                 {filtered.map((r) => (
-                  <tr key={r.id} className="border-t border-foreground/10">
-                    <td className="px-3 py-3 align-top text-muted-foreground">{r.id.slice(0, 6)}…</td>
-                    <td className="px-3 py-3 align-top">
-                      <div className="font-medium">{r.vehicleName || r.vehicleId}</div>
-                      <div className="text-xs text-muted-foreground">{r.vehicleCategory}</div>
-                    </td>
-                    <td className="px-3 py-3 align-top">
-                      <div>{r.from} → {r.to}</div>
-                    </td>
-                    <td className="px-3 py-3 align-top">
-                      <span className={`inline-flex rounded-full px-2 py-0.5 text-xs ${r.status === "canceled" ? "bg-red-100 text-red-700" : "bg-emerald-100 text-emerald-700"}`}>{r.status}</span>
-                    </td>
-                    <td className="px-3 py-3 align-top">
-                      <div className="text-foreground">{r.email}</div>
-                      <div className="text-xs text-muted-foreground">{r.phone}</div>
-                    </td>
-                    <td className="px-3 py-3 align-top text-muted-foreground">{r.createdAt ? new Date(r.createdAt).toLocaleString() : "—"}</td>
-                    <td className="px-3 py-3 align-top">
-                      <div className="flex items-center gap-2">
-                        <button onClick={() => setEditing(r)} className="inline-flex items-center gap-1 rounded-md border border-foreground/20 px-2 py-1 text-xs hover:border-foreground/40"><Pencil className="h-3.5 w-3.5" /> Éditer</button>
-                        <button onClick={() => toggleCancel(r)} className="inline-flex items-center gap-1 rounded-md border border-foreground/20 px-2 py-1 text-xs hover:border-foreground/40">{r.status === "canceled" ? "Restaurer" : "Annuler"}</button>
-                      </div>
-                    </td>
-                  </tr>
+                  <>
+                    <tr key={r.id} className="border-t border-foreground/10">
+                      <td className="px-3 py-3 align-top text-muted-foreground">{r.id.slice(0, 6)}…</td>
+                      <td className="px-3 py-3 align-top">
+                        <div className="font-medium">{r.vehicleName || r.vehicleId}</div>
+                        <div className="text-xs text-muted-foreground">{r.vehicleCategory}</div>
+                        {r.registrationNumber && (
+                          <div className="text-xs text-muted-foreground">Immat: {r.registrationNumber}</div>
+                        )}
+                      </td>
+                      <td className="px-3 py-3 align-top">
+                        <div>{r.from} → {r.to}</div>
+                        {r.reservationType && (
+                          <div className="mt-1 inline-flex rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] uppercase tracking-wide text-foreground">{r.reservationType}</div>
+                        )}
+                      </td>
+                      <td className="px-3 py-3 align-top">
+                        <span className={`inline-flex rounded-full px-2 py-0.5 text-xs ${r.status === "canceled" ? "bg-red-100 text-red-700" : "bg-emerald-100 text-emerald-700"}`}>{r.status}</span>
+                      </td>
+                      <td className="px-3 py-3 align-top">
+                        <div className="text-foreground">{r.email}</div>
+                        <div className="text-xs text-muted-foreground">{r.phone}</div>
+                      </td>
+                      <td className="px-3 py-3 align-top text-muted-foreground">{r.createdAt ? new Date(r.createdAt).toLocaleString() : "—"}</td>
+                      <td className="px-3 py-3 align-top">
+                        <div className="flex items-center gap-2">
+                          <button onClick={() => setOpenDetailId(openDetailId === r.id ? null : r.id)} className="inline-flex items-center gap-1 rounded-md border border-foreground/20 px-2 py-1 text-xs hover:border-foreground/40">Détails</button>
+                          <button onClick={() => setEditing(r)} className="inline-flex items-center gap-1 rounded-md border border-foreground/20 px-2 py-1 text-xs hover:border-foreground/40"><Pencil className="h-3.5 w-3.5" /> Éditer</button>
+                          <button onClick={() => toggleCancel(r)} className="inline-flex items-center gap-1 rounded-md border border-foreground/20 px-2 py-1 text-xs hover:border-foreground/40">{r.status === "canceled" ? "Restaurer" : "Annuler"}</button>
+                        </div>
+                      </td>
+                    </tr>
+                    {openDetailId === r.id && (
+                      <tr className="border-t border-foreground/10 bg-card/40">
+                        <td colSpan={7} className="px-3 py-3">
+                          <div className="grid gap-3 md:grid-cols-3">
+                            <div className="rounded-md border border-foreground/15 p-3">
+                              <div className="text-xs text-muted-foreground">Retour prévu</div>
+                              <div className="text-sm font-medium">{fmt(r.to)}</div>
+                            </div>
+                            <div className="rounded-md border border-foreground/15 p-3">
+                              <div className="text-xs text-muted-foreground">Durée</div>
+                              <div className="text-sm font-medium">{diffDays(r.from, r.to) ?? "—"} jours</div>
+                            </div>
+                            <div className="rounded-md border border-foreground/15 p-3">
+                              <div className="text-xs text-muted-foreground">Jours restants</div>
+                              <div className="text-sm font-medium">{(() => { const today = new Date(); const left = diffDays(today.toISOString().slice(0,10), r.to); return left != null ? Math.max(0, left) : "—" })()}</div>
+                            </div>
+                          </div>
+                          <div className="mt-3 grid gap-3 md:grid-cols-3">
+                            <div className="rounded-md border border-foreground/15 p-3">
+                              <div className="text-xs text-muted-foreground">Véhicule</div>
+                              <div className="text-sm font-medium">{r.vehicleName || "—"}</div>
+                              <div className="text-xs text-muted-foreground">ID: {r.vehicleId}</div>
+                              {r.registrationNumber && <div className="text-xs text-muted-foreground">Immatriculation: {r.registrationNumber}</div>}
+                              <Link className="mt-2 inline-flex text-xs underline" href={`/flotte/${r.vehicleId}`}>Ouvrir la fiche véhicule</Link>
+                            </div>
+                            <div className="rounded-md border border-foreground/15 p-3">
+                              <div className="text-xs text-muted-foreground">Client</div>
+                              <div className="text-sm font-medium">{r.email}</div>
+                              <div className="text-xs text-muted-foreground">{r.phone}</div>
+                            </div>
+                            <div className="rounded-md border border-foreground/15 p-3">
+                              <div className="text-xs text-muted-foreground">Créée le</div>
+                              <div className="text-sm font-medium">{r.createdAt ? new Date(r.createdAt).toLocaleString() : "—"}</div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </>
                 ))}
               </tbody>
             </table>

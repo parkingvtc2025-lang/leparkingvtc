@@ -91,24 +91,19 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
     const addDays = (d: Date, n: number) => { const x = new Date(d); x.setDate(x.getDate() + n); return x }
     const diffDays = (a: Date, b: Date) => Math.floor((startOfDay(a).getTime() - startOfDay(b).getTime()) / 86400000) + 0
     const today = startOfDay(new Date())
-    const tomorrow = addDays(today, 1)
 
     const from = startOfDay(fromUnnorm)
     const to = startOfDay(toUnnorm)
     if (from > to) {
       return NextResponse.json({ error: "Invalid date range" }, { status: 400 })
     }
-    if (from < tomorrow) {
-      return NextResponse.json({ error: "Sélection à partir de J+1" }, { status: 400 })
+    if (from < today) {
+      return NextResponse.json({ error: "Sélection à partir d'aujourd'hui" }, { status: 400 })
     }
     const daysCount = diffDays(to, from) + 1
-    const MIN_DAYS = 2
-    const MAX_DAYS = 60
+    const MIN_DAYS = 7
     if (daysCount < MIN_DAYS) {
       return NextResponse.json({ error: `Durée minimale: ${MIN_DAYS} jours` }, { status: 400 })
-    }
-    if (daysCount > MAX_DAYS) {
-      return NextResponse.json({ error: `Durée maximale: ${MAX_DAYS} jours` }, { status: 400 })
     }
 
     const hdr = req.headers
@@ -144,6 +139,7 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
       to: Timestamp.fromDate(to),
       siteId,
       days: daysCount,
+      type: (body?.type === 'rattachement' ? 'rattachement' : 'simple'),
       status: "new",
       createdAt: serverTimestamp(),
     })
@@ -156,6 +152,7 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
       vehicleId: id,
       vehicleName: vdata?.name || null,
       vehicleCategory: vdata?.vehicleType || vdata?.motorization || null,
+      reservationType: (body?.type === 'rattachement' ? 'rattachement' : 'simple'),
       lastName,
       firstName,
       email,
@@ -165,6 +162,21 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
       read: false,
       createdAt: serverTimestamp(),
     })
+
+    try {
+      const toYMD = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
+      await fetch("https://europe-west1-parkingvtc-25954.cloudfunctions.net/sendTestEmail", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: email,
+          vehicle: vdata?.name || id,
+          from: toYMD(from),
+          toDate: toYMD(to),
+        }),
+        cache: "no-store",
+      })
+    } catch {}
 
     return NextResponse.json({ ok: true, requestId: reqRef.id })
   } catch (e) {

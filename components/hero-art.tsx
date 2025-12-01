@@ -116,14 +116,14 @@ export default function HeroArt() {
             </Link>
             <Link
               href="/flotte"
-              className={`rounded-lg border border-foreground/20 bg-background px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-foreground transition-all duration-700 transform-gpu shine-sweep ${canAnimate ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-2 scale-95'}`}
+              className={`rounded-lg bg-foreground px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-primary-foreground transition-all duration-700 transform-gpu shine-sweep ${canAnimate ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-2 scale-95'}`}
               style={{ transitionDelay: canAnimate ? '220ms' as any : undefined }}
             >
               Voir notre flotte
             </Link>
             <a
               href="#about"
-              className={`rounded-lg border border-foreground/20 bg-background px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-foreground transition-all duration-700 transform-gpu shine-sweep ${canAnimate ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-2 scale-95'}`}
+              className={`rounded-lg bg-foreground px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-primary-foreground transition-all duration-700 transform-gpu shine-sweep ${canAnimate ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-2 scale-95'}`}
               style={{ transitionDelay: canAnimate ? '320ms' as any : undefined }}
             >
               En savoir plus

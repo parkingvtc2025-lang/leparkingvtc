@@ -155,25 +155,22 @@ const PillNav = ({
   };
 
   const toggleMobileMenu = () => {
-    const newState = !isMobileMenuOpen;
-    setIsMobileMenuOpen(newState);
+    const willOpen = !isMobileMenuOpen;
 
     const hamburger = hamburgerRef.current;
     const menu = mobileMenuRef.current;
 
-    if (hamburger) {
-      const lines = hamburger.querySelectorAll('.hamburger-line');
-      if (newState) {
+    // When opening: set open state first, then animate in
+    if (willOpen) {
+      setIsMobileMenuOpen(true);
+
+      if (hamburger) {
+        const lines = hamburger.querySelectorAll('.hamburger-line');
         gsap.to(lines[0], { rotation: 45, y: 3, duration: 0.3, ease });
         gsap.to(lines[1], { rotation: -45, y: -3, duration: 0.3, ease });
-      } else {
-        gsap.to(lines[0], { rotation: 0, y: 0, duration: 0.3, ease });
-        gsap.to(lines[1], { rotation: 0, y: 0, duration: 0.3, ease });
       }
-    }
 
-    if (menu) {
-      if (newState) {
+      if (menu) {
         gsap.set(menu, { visibility: 'visible' });
         gsap.fromTo(
           menu,
@@ -187,7 +184,16 @@ const PillNav = ({
             transformOrigin: 'top center'
           }
         );
-      } else {
+      }
+    } else {
+      // When closing: animate out first, then unset open state to avoid flicker
+      if (hamburger) {
+        const lines = hamburger.querySelectorAll('.hamburger-line');
+        gsap.to(lines[0], { rotation: 0, y: 0, duration: 0.3, ease });
+        gsap.to(lines[1], { rotation: 0, y: 0, duration: 0.3, ease });
+      }
+
+      if (menu) {
         gsap.to(menu, {
           opacity: 0,
           y: 10,
@@ -197,8 +203,12 @@ const PillNav = ({
           transformOrigin: 'top center',
           onComplete: () => {
             gsap.set(menu, { visibility: 'hidden' });
+            setIsMobileMenuOpen(false);
           }
         });
+      } else {
+        // Fallback: if no menu ref, close state immediately
+        setIsMobileMenuOpen(false);
       }
     }
 
@@ -222,9 +232,13 @@ const PillNav = ({
     ['--pill-text']: resolvedPillTextColor
   };
 
+  const containerClasses = `pill-nav-container${isMobileMenuOpen ? ' is-open' : ''}`;
+  const navClasses = `pill-nav ${className}${isMobileMenuOpen ? ' is-open' : ''}`;
+  const popoverClasses = `mobile-menu-popover mobile-only${isMobileMenuOpen ? ' is-open' : ''}`;
+
   return (
-    <div className="pill-nav-container">
-      <nav className={`pill-nav ${className}`} aria-label="Primary" style={cssVars}>
+    <div className={containerClasses}>
+      <nav className={navClasses} aria-label="Primary" style={cssVars}>
        
         <div className="pill-nav-items desktop-only" ref={navItemsRef} style={{ borderRadius: 10 }}>
           <ul className="pill-list" role="menubar">
@@ -295,7 +309,7 @@ const PillNav = ({
         </button>
       </nav>
 
-      <div className="mobile-menu-popover mobile-only" ref={mobileMenuRef} style={{ ...cssVars, borderRadius: 12 }}>
+      <div className={popoverClasses} ref={mobileMenuRef} style={{ ...cssVars, borderRadius: isMobileMenuOpen ? 0 : 12 }}>
         <ul className="mobile-menu-list">
           {items.map((item, i) => (
             <li key={item.href || `mobile-item-${i}`}>

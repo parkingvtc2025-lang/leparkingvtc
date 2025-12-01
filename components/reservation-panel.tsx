@@ -11,9 +11,10 @@ type ReservationPanelProps = {
   maxDays?: number
 }
 
-export default function ReservationPanel({ vehicleId, blockedDates = [], minDays = 2, maxDays = 60 }: ReservationPanelProps) {
+export default function ReservationPanel({ vehicleId, blockedDates = [], minDays = 7, maxDays = 60 }: ReservationPanelProps) {
   const [reserved, setReserved] = useState<Array<{ from: Date; to: Date }>>([])
   const [selected, setSelected] = useState<DateRange | undefined>()
+  const [reservationType, setReservationType] = useState<"simple" | "rattachement">("simple")
   const [lastName, setLastName] = useState("")
   const [firstName, setFirstName] = useState("")
   const [email, setEmail] = useState("")
@@ -25,7 +26,7 @@ export default function ReservationPanel({ vehicleId, blockedDates = [], minDays
 
   const startOfDay = (d: Date) => { const x = new Date(d); x.setHours(0,0,0,0); return x }
   const addDays = (d: Date, n: number) => { const x = new Date(d); x.setDate(x.getDate() + n); return x }
-  const tomorrow = addDays(startOfDay(new Date()), 1)
+  const today = startOfDay(new Date())
 
   useEffect(() => {
     let mounted = true
@@ -74,21 +75,16 @@ export default function ReservationPanel({ vehicleId, blockedDates = [], minDays
     }) as any[]
   }, [blockedDates])
   const disabledMatchers = useMemo(() => {
-    const arr: any[] = []
-    arr.push(...reservedMatchers)
-    arr.push(...blockedMatchers)
-    arr.push({ before: tomorrow })
-    return arr
-  }, [reservedMatchers, blockedMatchers, tomorrow])
+    // Only disable past days; allow any other dates (even if overlapping)
+    return [{ before: today }] as any[]
+  }, [today])
 
-  const modifiers = useMemo(() => ({ reserved: reservedMatchers, blocked: blockedMatchers }), [reservedMatchers, blockedMatchers])
-  const modifiersStyles = useMemo(() => ({
-    reserved: { backgroundColor: "#ef4444", color: "white" },
-    blocked: { backgroundColor: "#ef4444", color: "white" },
-  }), [])
+  // Do not style days in red; unavailable days are simply disabled
+  const modifiers = useMemo(() => ({}), [])
+  const modifiersStyles = useMemo(() => ({}), [])
 
   const rangeDays = useMemo(() => selected?.from && selected?.to ? Math.floor((startOfDay(selected.to).getTime() - startOfDay(selected.from).getTime()) / 86400000) + 1 : 0, [selected])
-  const validRangeLen = rangeDays === 0 || (rangeDays >= minDays && rangeDays <= maxDays)
+  const validRangeLen = rangeDays === 0 || rangeDays >= minDays
   const canSubmit = !!(
     selected?.from &&
     selected?.to &&
@@ -122,13 +118,14 @@ export default function ReservationPanel({ vehicleId, blockedDates = [], minDays
           phone: phone.trim(),
           from: toYMD(selected.from),
           to: toYMD(selected.to),
+          type: reservationType,
         }),
       })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
         throw new Error(data?.error || "Échec de la réservation")
       }
-      setSuccess("Votre demande a été envoyée.")
+      setSuccess("Votre demande a été envoyée. Un email de confirmation vous a été envoyé.")
       setSelected(undefined)
       setLastName("")
       setFirstName("")
@@ -172,18 +169,27 @@ export default function ReservationPanel({ vehicleId, blockedDates = [], minDays
             disabled={disabledMatchers as any}
             modifiers={modifiers as any}
             modifiersStyles={modifiersStyles as any}
-            modifiersClassNames={{ reserved: "rdp-day_reserved", blocked: "rdp-day_blocked" } as any}
             weekStartsOn={1}
             numberOfMonths={1}
             className="rdp text-foreground"
           />
           <ul className="mt-3 space-y-1 text-xs text-muted-foreground">
-            <li>• Les dates en rouge sont indisponibles (réservées ou bloquées).</li>
-            <li>• Départ à partir de demain (J+1).</li>
-            <li>• Durée: {minDays} à {maxDays} jours.</li>
+            <li>• Départ à partir d'aujourd'hui.</li>
+            <li>• Durée minimale: {minDays} jours.</li>
           </ul>
         </div>
         <div className="space-y-4">
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Type de réservation</label>
+            <select
+              value={reservationType}
+              onChange={(e) => setReservationType(e.target.value as any)}
+              className="w-full rounded-md border border-foreground/20 bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/30"
+            >
+              <option value="simple">Réservation simple</option>
+              <option value="rattachement">Réservation rattachement</option>
+            </select>
+          </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Nom</label>

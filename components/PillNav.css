@@ -8,6 +8,10 @@
   .pill-nav-container {
     width: 100%;
     left: 0;
+    right: 0;
+    position: absolute; /* closed: float over hero */
+    top: 12px;          /* slight offset from top when closed */
+    z-index: 1000;
   }
 }
 
@@ -27,7 +31,61 @@
     width: 100%;
     justify-content: space-between;
     padding: 0 1rem;
-    background: transparent;
+    background: transparent; /* closed state: transparent */
+    height: var(--nav-h);      /* define bar height */
+    display: flex;
+    align-items: center;       /* center toggler vertically */
+  }
+}
+
+/* Mobile OPEN state styling: flush top, white background, black text */
+@media (max-width: 768px) {
+  .pill-nav-container.is-open {
+    position: fixed; /* open: stick to top */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+
+  .pill-nav.is-open {
+    background: #ffffff; /* white bar when open */
+    color: #000000;      /* black text when open */
+    padding: 0;          /* no side gaps when open */
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+    border-bottom: 1px solid #f1f5f9; /* subtle separator */
+  }
+
+  .mobile-menu-popover.is-open {
+    position: fixed;      /* lock to viewport under the bar */
+    top: var(--nav-h);    /* right under the navbar height */
+    left: 0;
+    right: 0;
+    background: #ffffff;  /* white background */
+    border-radius: 0;     /* no rounded corners */
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    max-height: 45vh;     /* small top sheet */
+    overflow: auto;       /* scroll if content exceeds */
+  }
+
+  .mobile-menu-popover.is-open .mobile-menu-link {
+    color: #000000;            /* black text */
+    background-color: #ffffff; /* white items */
+    border-radius: 0;          /* flat list items */
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  .mobile-menu-popover.is-open .mobile-menu-link:hover {
+    background-color: #f9fafb; /* subtle hover */
+    color: #000000;
+  }
+
+  .mobile-menu-popover.is-open .mobile-menu-list {
+    padding: 0;  /* remove inner gaps */
+    gap: 0;
   }
 }
 
@@ -168,7 +226,7 @@
   width: var(--nav-h);
   height: var(--nav-h);
   border-radius: 50%;
-  background: var(--base, #000);
+  background: var(--base, #000); /* default (closed) */
   border: none;
   display: none;
   flex-direction: column;
@@ -189,10 +247,23 @@
 .hamburger-line {
   width: 16px;
   height: 2px;
-  background: var(--pill-bg, #fff);
+  background: var(--pill-bg, #fff); /* default (closed) */
   border-radius: 1px;
   transition: all 0.01s ease;
   transform-origin: center;
+}
+
+@media (max-width: 768px) {
+  /* When the nav is open and bar is white, use black lines for contrast */
+  .pill-nav.is-open .hamburger-line {
+    background: #000000;
+  }
+  /* Remove toggler background only when open */
+  .pill-nav.is-open .mobile-menu-button {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+  }
 }
 
 .mobile-menu-popover {
