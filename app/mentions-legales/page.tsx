@@ -1,3 +1,10 @@
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Mentions légales",
+  description: "Mentions légales du site Le Parking VTC: éditeur, hébergement, contact et responsabilités.",
+}
+
 export default function MentionsLegalesPage() {
   return (
     <main className="min-h-screen px-6 py-16 md:py-24 max-w-3xl mx-auto">

@@ -1,19 +1,35 @@
 "use client"
 
+import dynamic from "next/dynamic"
+import Script from "next/script"
 import Navbar from "@/components/navbar"
-import StickyNav from "@/components/sticky-nav"
-import FloatingContact from "@/components/floating-contact"
-import Chatbot from "@/components/chatbot"
-import CarShowcase from "@/components/car-showcase"
 import { AboutSection, DocumentsSection, ProductsSection } from "@/components/sections"
 import SectionDivider from "@/components/section-divider"
 import Footer from "@/components/footer"
 import PartnersSection from "@/components/partners"
-import ScrollIndicator from "@/components/scroll-indicator"
+const StickyNav = dynamic(() => import("@/components/sticky-nav"), { ssr: false })
+const FloatingContact = dynamic(() => import("@/components/floating-contact"), { ssr: false })
+const Chatbot = dynamic(() => import("@/components/chatbot"), { ssr: false })
+const CarShowcase = dynamic(() => import("@/components/car-showcase"))
+const ScrollIndicator = dynamic(() => import("@/components/scroll-indicator"), { ssr: false })
 
 export default function Home() {
   return (
     <main className="relative min-h-screen">
+      {/* Structured Data */}
+      <Script id="ld-website" type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Le Parking VTC",
+          url: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+          potentialAction: {
+            "@type": "SearchAction",
+            target: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/flotte?q={search_term_string}`,
+            "query-input": "required name=search_term_string"
+          }
+        })}
+      </Script>
       <Navbar />
       <CarShowcase />
       <SectionDivider variant="sunset" />

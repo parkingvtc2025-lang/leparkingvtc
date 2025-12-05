@@ -1,3 +1,10 @@
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Conditions d'utilisation",
+  description: "Conditions générales d'utilisation du site Le Parking VTC.",
+}
+
 export default function ConditionsUtilisationPage() {
   return (
     <main className="min-h-screen px-6 py-16 md:py-24 max-w-3xl mx-auto">

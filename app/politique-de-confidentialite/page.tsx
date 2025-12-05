@@ -1,3 +1,10 @@
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Politique de confidentialité",
+  description: "Politique de confidentialité de Le Parking VTC: collecte, utilisation, conservation des données et droits RGPD.",
+}
+
 export default function PolitiqueConfidentialitePage() {
   return (
     <main className="min-h-screen px-6 py-16 md:py-24 max-w-3xl mx-auto">

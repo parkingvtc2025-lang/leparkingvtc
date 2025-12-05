@@ -2,9 +2,48 @@ import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { notFound } from "next/navigation"
 import { headers } from "next/headers"
+import type { Metadata } from "next"
 import Navbar from "@/components/navbar"
 import ImageCarousel from "@/components/image-carousel"
 import ReservationModal from "@/components/reservation-modal"
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+  const h = await headers()
+  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000"
+  const proto = h.get("x-forwarded-proto") ?? (process.env.NODE_ENV === "development" ? "http" : "https")
+  const base = `${proto}://${host}`
+  try {
+    const res = await fetch(`${base}/api/vehicles/${id}`, { cache: "no-store" })
+    if (!res.ok) throw new Error("not ok")
+    const v = await res.json()
+    const sanitize = (s: any) => (s == null ? s : String(s).replace(/\b(v[ée]hicule\s+)?disponible\b/gi, "").replace(/\s{2,}/g, " ").trim())
+    const title = sanitize(v?.name) || "Véhicule"
+    const description = sanitize(v?.summary) || "Détails du véhicule disponible pour chauffeurs VTC."
+    const url = `${process.env.NEXT_PUBLIC_SITE_URL || `${base}`}/flotte/${id}`
+    return {
+      title,
+      description,
+      alternates: { canonical: url },
+      openGraph: {
+        title,
+        description,
+        url,
+        type: "article",
+        images: Array.isArray(v?.imageUrls) && v.imageUrls.length ? v.imageUrls.map((u: string) => ({ url: u })) : (v?.image ? [{ url: v.image }] : undefined),
+      },
+      robots: { index: true, follow: true },
+    }
+  } catch (e) {
+    const url = `${process.env.NEXT_PUBLIC_SITE_URL || `${base}`}/flotte/${id}`
+    return {
+      title: "Véhicule | Le Parking VTC",
+      description: "Détails du véhicule disponible pour chauffeurs VTC.",
+      alternates: { canonical: url },
+      robots: { index: true, follow: true },
+    }
+  }
+}
 
 export default async function VehicleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
