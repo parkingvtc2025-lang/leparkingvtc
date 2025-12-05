@@ -22,10 +22,10 @@ export default function Home() {
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "Le Parking VTC",
-          url: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+          url: "/",
           potentialAction: {
             "@type": "SearchAction",
-            target: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/flotte?q={search_term_string}`,
+            target: "/flotte?q={search_term_string}",
             "query-input": "required name=search_term_string"
           }
         })}
