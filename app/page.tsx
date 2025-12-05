@@ -8,6 +8,7 @@ import CarShowcase from "@/components/car-showcase"
 import { AboutSection, DocumentsSection, ProductsSection } from "@/components/sections"
 import SectionDivider from "@/components/section-divider"
 import Footer from "@/components/footer"
+import PartnersSection from "@/components/partners"
 import ScrollIndicator from "@/components/scroll-indicator"
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
       <DocumentsSection />
       <SectionDivider variant="ocean" flip />
       <ProductsSection />
+      <PartnersSection />
       <Footer />
       <StickyNav />
       <FloatingContact />

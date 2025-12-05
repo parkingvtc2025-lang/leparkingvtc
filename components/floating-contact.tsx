@@ -55,6 +55,19 @@ export default function FloatingContact() {
               </div>
             </a>
             <a
+              href="tel:+33180872740"
+              className="flex items-center gap-3 rounded border border-border/40 px-3 py-2 transition-colors hover:bg-secondary"
+              title="Téléphone fixe"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded bg-emerald-600 text-white">
+                <Phone className="w-4 h-4" />
+              </span>
+              <div className="flex flex-col leading-tight">
+                <span className="text-sm font-medium">Appeler (fixe)</span>
+                <span className="text-xs opacity-70">01 80 87 27 40</span>
+              </div>
+            </a>
+            <a
               href="mailto:contact@leparkingvtc.com"
               className="flex items-center gap-3 rounded border border-border/40 px-3 py-2 transition-colors hover:bg-secondary"
               title="Email"

@@ -172,8 +172,8 @@ export default function CarShowcase() {
           </h1>
         </div>
         <div className="absolute top-10 left-6 right-6 z-30 mx-auto max-w-lg space-y-5 md:left-12 md:right-auto md:mx-0 hidden lg:block">
-          <p className="text-xs tracking-[0.4em] text-muted-foreground/80 uppercase md:text-sm">
-            COLLECTION PRIVÉE
+          <p className="inline-block rounded-xl bg-foreground px-4 py-2 md:px-6 md:py-3 text-3xl md:text-5xl font-black tracking-tight text-primary-foreground shadow-sm">
+            Le Parking VTC
           </p>
           <h1 className="text-3xl font-light leading-tight text-foreground md:text-5xl">
             Des véhicules d'exception pour une expérience
@@ -213,10 +213,10 @@ export default function CarShowcase() {
             <div className="flex flex-col items-center gap-3 mt-10">
               <div className="h-10 w-px bg-foreground/20"></div>
               <p
-                className="text-[9px] tracking-[0.75em] text-muted-foreground/50 uppercase"
+                className="text-[10px] tracking-[0.6em] text-foreground/70 font-bold uppercase"
                 style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
               >
-                COLLECTION PRIVÉE
+                LE PARKING VTC
               </p>
             </div>
           </div>

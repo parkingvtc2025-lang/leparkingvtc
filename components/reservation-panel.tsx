@@ -181,14 +181,22 @@ export default function ReservationPanel({ vehicleId, blockedDates = [], minDays
         <div className="space-y-4">
           <div>
             <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Type de réservation</label>
-            <select
-              value={reservationType}
-              onChange={(e) => setReservationType(e.target.value as any)}
-              className="w-full rounded-md border border-foreground/20 bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/30"
-            >
-              <option value="simple">Réservation simple</option>
-              <option value="rattachement">Réservation rattachement</option>
-            </select>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2" role="group" aria-label="Type de réservation">
+              <button
+                type="button"
+                onClick={() => setReservationType("simple")}
+                className={`rounded-md border px-3 py-2.5 text-sm font-medium transition ${reservationType === "simple" ? "border-primary bg-primary text-primary-foreground" : "border-foreground/20 bg-background text-foreground hover:border-foreground/40"}`}
+              >
+                Location simple
+              </button>
+              <button
+                type="button"
+                onClick={() => setReservationType("rattachement")}
+                className={`rounded-md border px-3 py-2.5 text-sm font-medium transition ${reservationType === "rattachement" ? "border-primary bg-primary text-primary-foreground" : "border-foreground/20 bg-background text-foreground hover:border-foreground/40"}`}
+              >
+                Location avec rattachement
+              </button>
+            </div>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>

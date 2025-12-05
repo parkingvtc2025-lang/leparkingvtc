@@ -99,18 +99,6 @@ export default function CarCard({ car, isActive }: CarCardProps) {
             >
               Réserver
             </Link>
-            <Link
-              href="/flotte"
-              className="px-5 py-2.5 rounded-lg bg-foreground text-primary-foreground text-sm font-medium transition-opacity hover:opacity-90"
-            >
-              Voir nos véhicules
-            </Link>
-            <a
-              href="#about"
-              className="px-5 py-2.5 rounded-lg bg-foreground text-primary-foreground text-sm font-medium transition-opacity hover:opacity-90"
-            >
-              En savoir plus
-            </a>
           </div>
         </div>
 

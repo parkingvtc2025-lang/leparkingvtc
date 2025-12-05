@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from "lucide-react"
 
 export default function Footer() {
@@ -58,12 +59,22 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-background/70">
               <li>
                 <a href="#" className="hover:text-background transition-colors">
+                  Location Longue Durée
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-background transition-colors">
                   Location Courte Durée
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-background transition-colors">
-                  Location Longue Durée
+                  Rattachement
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-background transition-colors">
+                  Portage salarial
                 </a>
               </li>
               <li>
@@ -88,7 +99,7 @@ export default function Footer() {
             <div className="space-y-4 text-sm text-background/70">
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
-                <span>123 Avenue des Champs, 75008 Paris</span>
+                <span>4 Avenue Laurent Cély, 92600 Asnières-sur-Seine</span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 flex-shrink-0" />
@@ -115,14 +126,25 @@ export default function Footer() {
               <p>
                 <span className="font-medium text-background">Lundi - Vendredi</span>
                 <br />
-                08:00 - 22:00
-              </p>
-              <p>
-                <span className="font-medium text-background">Samedi - Dimanche</span>
-                <br />
-                24/7 Disponible
+                10h - 18h
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Partners (small) */}
+        <div className="mb-10 flex items-center justify-center gap-4 md:gap-6">
+          <div className="rounded-md px-2.5 py-1.5 flex items-center justify-center" style={{ backgroundColor: "#00FF75" }}>
+            <Image src="/svgpartenaire/Bolt/Bolt_idiYLKHeFj_0.svg" alt="Bolt" width={72} height={20} className="h-4 w-auto" />
+          </div>
+          <div className="rounded-md px-2.5 py-1.5 flex items-center justify-center" style={{ backgroundColor: "#FF0069" }}>
+            <Image src="/svgpartenaire/Heetch/Heetch_idvgvZoLf2_1.svg" alt="Heetch" width={80} height={20} className="h-4 w-auto" />
+          </div>
+          <div className="rounded-md px-2.5 py-1.5 flex items-center justify-center" style={{ backgroundColor: "#000000" }}>
+            <Image src="/svgpartenaire/Uber/Uber_idx5jwDz9K_0.svg" alt="Uber" width={72} height={20} className="h-4 w-auto" />
+          </div>
+          <div className="rounded-md px-2.5 py-1.5 flex items-center justify-center" style={{ backgroundColor: "#111827" }}>
+            <span className="text-white text-xs font-semibold tracking-tight">FlexiFleet</span>
           </div>
         </div>
 
@@ -131,13 +153,13 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-background/60">
             <p>&copy; 2025 Le Parking VTC. Tous droits réservés.</p>
             <div className="flex gap-6">
-              <a href="#" className="hover:text-background transition-colors">
+              <a href="/politique-de-confidentialite" className="hover:text-background transition-colors">
                 Politique de Confidentialité
               </a>
-              <a href="#" className="hover:text-background transition-colors">
+              <a href="/conditions-d-utilisation" className="hover:text-background transition-colors">
                 Conditions d'Utilisation
               </a>
-              <a href="#" className="hover:text-background transition-colors">
+              <a href="/mentions-legales" className="hover:text-background transition-colors">
                 Mentions Légales
               </a>
             </div>
